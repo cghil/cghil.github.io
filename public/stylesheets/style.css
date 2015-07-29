@@ -1,0 +1,216 @@
+@font-face {
+    font-family: ProximaNova-Light;
+    src: url(ProximaNova-Light.ttf);
+    font-weight: lighter;
+}
+
+body {
+	font-family: "ProximaNova-Light", sans-serif;
+}
+
+#splash {
+	background-color: #ffffff;
+}
+
+#projects {
+	color: white;
+	background-color: #32808e;
+}
+
+#words {
+	background-color: #5AA48B;
+}
+
+footer {
+	background-color: #ffffff;
+}
+
+h1, h2, h3, h4, h5 {
+	margin: 0px 0px 0px 0px;
+}
+
+.welcome > p {
+	font-size: 18px;
+	line-height: 150%;
+}
+
+h1 {
+	font-size: 45px;
+}
+
+.title { 
+	color: black;
+}
+
+.profile {
+	margin-top: 10vh;
+	margin-bottom: 10vh;
+}
+
+.welcome {
+	margin-top: 10vh;
+	margin-bottom: 10vh;
+}
+
+.profile-photo {
+	margin-top: 10vh;
+}
+
+.logos {
+	margin-top: 2vh;
+}
+
+a:hover {
+	text-decoration: none;
+	color: black;
+}
+
+.logos > a:link {
+	color: black;
+	opacity: 0.5;
+	text-decoration: none;
+}
+
+.logos > a:hover {
+	color: black;
+	opacity: 1;
+	text-decoration: none;
+}
+
+.logos > a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+span.black-link {
+	color: black;
+	text-decoration: none;
+	opacity: 0.6;
+}
+
+span.black-link:hover {
+	color: black;
+	text-decoration: none;
+	opacity: 1;
+}
+
+.logo {
+	margin-right: 15px;
+}
+
+.email {
+	margin-bottom: 10px;
+}
+
+.margin-15 {
+	margin-top: 15px;
+}
+
+i.padding {
+	padding: 5px 5px 5px 5px;
+}
+
+i:hover{
+	background-color: #A5A5A5;
+	border-radius: 5px;
+}
+
+.white {
+	color: white;
+}
+
+.gallery-details {
+	margin-top: 20vh;
+}
+
+.gallery {
+	margin-top: 5vh;
+	margin-bottom: 5vh;
+}
+
+.resize {
+	width: auto;
+	height: 209px;
+	max-width: 300px;
+	max-height: 300px;
+}
+
+.info {
+	padding-top: 10px;
+	padding-left: 5px;
+	background-color: #A5A5A5;
+	max-width: 300px;
+	max-height: 300px;
+	height: 100%;
+}
+
+.info > a {
+	color: black;
+}
+
+.round-corners {
+	border-radius: 10px;
+}
+
+.bluer {
+	background-color: #55b6bb;
+}
+
+.project {
+	display: inline-block;
+	margin-right: 30px;
+}
+
+/*#projects > .project {
+	border: solid 2px #32808e;
+}
+
+#words > .project {
+	border: solid 2px #5AA48B;
+}*/
+
+.foot {
+	padding-top: 5vh;
+}
+
+.display-inline {
+	display: inline;
+}
+
+.borders {
+	border: solid 2px black;
+}
+
+.debugger {
+	border: solid 1px red;
+}
+
+@media (max-width: 990px) {
+	.profile {
+		margin-top: 5vh;
+		margin-bottom: 5vh;
+	}
+
+	.welcome {
+		margin-top: 5vh;
+		margin-bottom: 5vh;
+	}
+
+	.profile-photo {
+		margin-top: 5vh;
+	}
+
+	.gallery-details {
+		margin-top: 5vh;
+	}
+	.project {
+		margin-bottom: 3vh;
+	}
+}
+
+@media (max-width: 767px) {
+	.welcome {
+		margin-right: 100px;
+		margin-left: 100px;
+	}
+}
