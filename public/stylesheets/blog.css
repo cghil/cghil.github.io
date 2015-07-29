@@ -1,0 +1,14 @@
+.resize {
+	width: auto;
+	height: auto;
+	max-width: 400px;
+	max-height: 400px;
+}
+
+.image {
+	margin: 5vh 0px 5vh 0px;
+}
+
+.title {
+	color: #C1514F
+}

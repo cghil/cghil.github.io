@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Out of Scope With Corey</title>
+	<link rel="stylesheet" type="text/css" href="../public/stylesheets/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../public/stylesheets/blog.css">
+</head>
+<body>
+	<div class="container">
+			<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+				<div class="image">
+					<img class="resize img-responsive center-block" src="../public/images/books.jpg"></img>
+				</div>
+				<div class="blog">
+					<h1 class="title">What Happens When You Type "Google.com?"</h1>
+					<h4>29 / July / 15 <small>By Corey Ghilarduci</small></h4>
+					<hr>
+					<p>If you're reading this, chances are you've come across answers to this question before. You've probably read this <a href="https://github.com/alex/what-happens-when">Github</a> page on the topic, then gave up. You may have also come across this <a href="http://igoro.com/archive/what-really-happens-when-you-navigate-to-a-url/">blog post</a>, which does a slightly better job.</p>
+					<p>Here's my take at it-- in colloquial terms.</p>
+					<h2>1. You type "google.com" into your browser</h2>
+					<h2>2. Your browser looks up the IP address (127.102...) for "google.com"</h2>
+					<ul>
+						<li><strong>Browser </strong>checks its <strong>cache</strong>... if not found</li>
+						<li><strong>Operating System</strong> (ex. OSX) <strong>cache</strong> is checked... if not found</li>
+						<li><strong>Router cache</strong> is checked (aka the piece of equipment that connects to your modem)... </li>
+						<li><strong>ISP's DNS cache</strong> is checked...</li>
+						<li>Domain Name Server's (DNS) Recursive Search occurs, pinging other DNS for Google's IP address</li>
+					</ul>
+					<h2>3. Boom... You got that IP address. The Browser opens a TCP connection (a socket)</h2>
+						<ul>
+							<li>If you made a request through <strong>HTTP</strong>, the TCP connection opens up on PORT 80</li>
+							<li>If <strong>HTTPS</strong>, the connection is opened on PORT 443</li>
+							<li>The socket is neccessary to send and recieve information</li>
+						</ul>
+					<h2>4. A Transport Layer Security (TLS) Handshake Occurs</h2>
+						<ul>
+							<li>A. The Client sends a ClientHello message with a list of specifications, like cipher and compression algorithms; the Server sends a ServerHello message with a chosen cipher and compression algorithm.</li>
+							<li>B. Server also sends a certificate signed by a Certificate Authority; Client checks the CA for authenticity</li>
+							<li></li>
+						</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
