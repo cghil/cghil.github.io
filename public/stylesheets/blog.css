@@ -16,3 +16,10 @@
 p, li {
 	font-size: 18px;
 }
+
+.heavy {
+	border: none;
+	height: 1px;
+	color: #333;
+	background-color: #333;
+}
