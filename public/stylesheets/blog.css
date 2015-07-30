@@ -26,12 +26,10 @@ p, li {
 
 .home-link > i, a.back-link {
 	font-size:30px;
-	color:#C1514F;
 }
 
 a.home-link:hover {
 	text-decoration: none;
-	color: #C1514F;
 }
 
 a:hover {
