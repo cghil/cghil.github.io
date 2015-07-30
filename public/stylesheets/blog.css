@@ -23,3 +23,17 @@ p, li {
 	color: #333;
 	background-color: #333;
 }
+
+.home-link > i, a.back-link {
+	font-size:30px;
+	color:#C1514F;
+}
+
+a.home-link:hover {
+	text-decoration: none;
+	color: #C1514F;
+}
+
+a:hover {
+	text-decoration: none;
+}

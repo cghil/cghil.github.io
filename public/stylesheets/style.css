@@ -207,10 +207,3 @@ i:hover{
 		margin-bottom: 3vh;
 	}
 }
-
-@media (max-width: 767px) {
-	.welcome {
-		margin-right: 100px;
-		margin-left: 100px;
-	}
-}

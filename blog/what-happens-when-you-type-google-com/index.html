@@ -1,91 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Out of Scope With Corey</title>
-	<link rel="stylesheet" type="text/css" href="../../public/stylesheets/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../../public/stylesheets/blog.css">
+    <title>Out of Scope With Corey</title>
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/blog.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/font-awesome.css">
 </head>
+
 <body>
-	<div class="container">
-			<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-				<div class="image">
-					<img class="resize img-responsive center-block" src="../../public/images/books.jpg"></img>
-				</div>
-				<div class="blog">
-					<h1 class="title">What Happens When You Type "Google.com?"</h1>
-					<h4>29 / July / 15 <small>By Corey Ghilarduci</small></h4>
-					<hr>
-					<p>If you're reading this, chances are you've come across answers to this question before. You've probably read this <a href="https://github.com/alex/what-happens-when">Github</a> page on the topic, then gave up. You may have also come across this <a href="http://igoro.com/archive/what-really-happens-when-you-navigate-to-a-url/">blog post</a>, which does a slightly better job.</p>
-					<p>Here's my take at it-- in colloquial terms.</p>
-					<h3>1. You type "google.com" into your browser</h3>
-					<h3>2. Your browser looks up the IP address (127.102...) for "google.com"</h3>
-					<ul>
-						<li><strong>Browser </strong>checks its <strong>cache</strong>... if not found</li>
-						<li><strong>Operating System</strong> (ex. OSX) <strong>cache</strong> is checked... if not found</li>
-						<li><strong>Router cache</strong> is checked (aka the piece of equipment that connects to your modem)... </li>
-						<li><strong>ISP's DNS cache</strong> is checked...</li>
-						<li>Domain Name Server's (DNS) Recursive Search occurs, pinging other DNS for Google's IP address</li>
-					</ul>
-					<h3>3. Boom... You got that IP address. The Browser opens a TCP connection (a socket)</h3>
-					<ul>
-						<li>If you made a request through <strong>HTTP</strong>, the TCP connection opens up on PORT 80</li>
-						<li>If <strong>HTTPS</strong>, the connection is opened on PORT 443</li>
-						<li>The socket is neccessary to send and recieve information</li>
-					</ul>
-					<h3>4. A Transport Layer Security (TLS) Handshake Occurs</h3>
-					<ul>
-						<li>A. The Client sends a ClientHello message with a list of specifications, like cipher and compression algorithms; the Server sends a ServerHello message with a chosen cipher and compression algorithm.</li>
-						<li>B. Server also sends a certificate signed by a <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>; Client checks the CA for authenticity.</li>
-						<li>C. Client then creates pseudo-random bytes (uses this to determin a <strong>symmetric key</strong>), and encrpyts the bytes with the server's <em>public key</em>, Server decrypts the bytes using the <em>private key</em>, thereby creating its own copy of the <strong>symmetric key</strong>.</li>
-						<li>The TLS handshake is necessary to ensure the client and server are who they say they are. The <strong>symmetric key</strong> is now used for further transfer of information. It prevents hackers from getting your information.</li>
-					</ul>
-				<h3>5. Browser finally sends the HTTP request to the Server</h3>
-					<ul>
-						<li>In the headers, the request will include the <strong>User-Agent, Authorization, Accept, Content-Type, Origin</strong>. (For more information see <a href="http://apionrails.icalialabs.com/book/chapter_two">HERE</a>.) </li>
-						<li>Cookies (key-value pairs) are also sent to track the state of the web site in-between page requests. Also stores user log-in info, user settings, and more.</li>
-						<li><strong>GET</strong> request parameters are typically sent through the URL</li>
-						<li><strong>POST</strong> request parameters are sent in the request body, just under the headers</li>
-					</ul>
-					<h3>6. Server responds with a permanent redirect to "www.google.com"</h3>
-					<ul>
-						<li>
-							Search engines understand permanent redirects (301) response, but they're not smart enough to tell the difference "www.google.com" and "google.com"
-						</li>
-						<li>
-							The Browser then repeats the above steps to ping "www.google.com"
-						</li>
-					</ul>
-					<h3>7. Server 'handles' the request</h3>
-					<ul>
-						<li><strong>Web Server Software</strong> (ex. Thin and Apache) recieves the HTTP request and decides which request handler/app (Ruby, PHP, Python, etc.) should handle the request</li>
-						<li><strong>Request Handler</strong> reads the request, parameters, and cookies. The app generates an HTML response. Request handlers often store resources in a file hierarchy similar to URL structure</li>
-					</ul>
-					<h3>8 .Browser begins to render the HTML</h3>
-					<h3>9. Browser sends request for objects embedded in HTML</h3>
-						<ul>
-							<li>
-								Browser fetch images, CSS, and JS files through the same steps listed above.
-							</li>
-							<li>
-								<em>Flash of Unstyled Content </em>(FOUC) may happen
-							</li>
-						</ul>
-					<h3>10. Browser sends futher AJAX requests</h3>
-					<ul>
-						<li>...based on user input</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-	<footer>
-		<div class="container">
-			<hr class="heavy">
-			<div>
-				<a href="/">Home</a>
-			</div>
-			&copy Corey Ghilarducci
-		</div>
-	</footer>
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+            <div class="image">
+                <img class="resize img-responsive center-block" src="../../public/images/books.jpg"></img>
+            </div>
+            <div class="blog">
+                <h1 class="title">What Happens When You Type "Google.com?"</h1>
+                <h4>29 / July / 15 <small>By Corey Ghilarduci</small></h4>
+                <a href="/"><h5><i class="fa fa-chevron-left"></i> Back</h5></a>
+                <hr>
+                <p>If you're reading this, chances are you've come across answers to this question before. You've probably read this <a href="https://github.com/alex/what-happens-when">Github</a> page on the topic, then gave up. You may have also come across this <a href="http://igoro.com/archive/what-really-happens-when-you-navigate-to-a-url/">blog post</a>, which does a slightly better job.</p>
+                <p>Here's my take at it-- in colloquial terms.</p>
+                <h3>1. You type "google.com" into your browser</h3>
+                <h3>2. Your browser looks up the IP address (127.102...) for "google.com"</h3>
+                <ul>
+                    <li><strong>Browser </strong>checks its <strong>cache</strong>... if not found</li>
+                    <li><strong>Operating System</strong> (ex. OSX) <strong>cache</strong> is checked... if not found</li>
+                    <li><strong>Router cache</strong> is checked (aka the piece of equipment that connects to your modem)... </li>
+                    <li><strong>ISP's DNS cache</strong> is checked...</li>
+                    <li>Domain Name Server's (DNS) Recursive Search occurs, pinging other DNS for Google's IP address</li>
+                </ul>
+                <h3>3. Boom... You got that IP address. The Browser opens a TCP connection (a socket)</h3>
+                <ul>
+                    <li>If you made a request through <strong>HTTP</strong>, the TCP connection opens up on PORT 80</li>
+                    <li>If <strong>HTTPS</strong>, the connection is opened on PORT 443</li>
+                    <li>The socket is neccessary to send and recieve information</li>
+                </ul>
+                <h3>4. A Transport Layer Security (TLS) Handshake Occurs</h3>
+                <ul>
+                    <li>A. The Client sends a ClientHello message with a list of specifications, like cipher and compression algorithms; the Server sends a ServerHello message with a chosen cipher and compression algorithm.</li>
+                    <li>B. Server also sends a certificate signed by a <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>; Client checks the CA for authenticity.</li>
+                    <li>C. Client then creates pseudo-random bytes (uses this to determin a <strong>symmetric key</strong>), and encrpyts the bytes with the server's <em>public key</em>, Server decrypts the bytes using the <em>private key</em>, thereby creating its own copy of the <strong>symmetric key</strong>.</li>
+                    <li>The TLS handshake is necessary to ensure the client and server are who they say they are. The <strong>symmetric key</strong> is now used for further transfer of information. It prevents hackers from getting your information.</li>
+                </ul>
+                <h3>5. Browser finally sends the HTTP request to the Server</h3>
+                <ul>
+                    <li>In the headers, the request will include the <strong>User-Agent, Authorization, Accept, Content-Type, Origin</strong>. (For more information see <a href="http://apionrails.icalialabs.com/book/chapter_two">HERE</a>). </li>
+                    <li>Cookies (key-value pairs) are also sent to track the state of the web site in-between page requests. Also stores user log-in info, user settings, and more.</li>
+                    <li><strong>GET</strong> request parameters are typically sent through the URL</li>
+                    <li><strong>POST</strong> request parameters are sent in the request body, just under the headers</li>
+                </ul>
+                <h3>6. Server responds with a permanent redirect to "www.google.com"</h3>
+                <ul>
+                    <li>
+                        Search engines understand permanent redirects (301) response, but they're not smart enough to tell the difference "www.google.com" and "google.com"
+                    </li>
+                    <li>
+                        The Browser then repeats the above steps to ping "www.google.com"
+                    </li>
+                </ul>
+                <h3>7. Server 'handles' the request</h3>
+                <ul>
+                    <li><strong>Web Server Software</strong> (ex. Thin and Apache) recieves the HTTP request and decides which request handler/app (Ruby, PHP, Python, etc.) should handle the request</li>
+                    <li><strong>Request Handler</strong> reads the request, parameters, and cookies. The app generates an HTML response. Request handlers often store resources in a file hierarchy similar to URL structure</li>
+                </ul>
+                <h3>8 .Browser begins to render the HTML</h3>
+                <h3>9. Browser sends request for objects embedded in HTML</h3>
+                <ul>
+                    <li>
+                        Browser fetch images, CSS, and JS files through the same steps listed above.
+                    </li>
+                    <li>
+                        <em>Flash of Unstyled Content </em>(FOUC) may happen
+                    </li>
+                </ul>
+                <h3>10. Browser sends futher AJAX requests</h3>
+                <ul>
+                    <li>...based on user input</li>
+                </ul>
+            	<a class="home-link back-link" href="/"><i class="fa fa-chevron-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <footer>
+        <div class="container">
+            <hr class="heavy">
+            &copy Corey Ghilarducci 2014
+        </div>
+    </footer>
 </body>
+
 </html>
