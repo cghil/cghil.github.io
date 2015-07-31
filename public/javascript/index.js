@@ -85,7 +85,6 @@ force.on("tick", function(){
 		.attr("dx", function(d){ return d.x; })
 		.attr("dy", function(d){ return d.y; })
 });
-
  
 var legend = svg.selectAll("g.legend")
 	.data(color.domain().slice())
