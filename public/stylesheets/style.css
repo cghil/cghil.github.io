@@ -215,3 +215,9 @@ i:hover{
 		margin-bottom: 3vh;
 	}
 }
+
+@media (max-width: 1000px) {
+	#visual {
+		display: none;
+	}
+}

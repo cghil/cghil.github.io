@@ -95,9 +95,9 @@ var legend = svg.selectAll("g.legend")
 		.attr("transform", function(d, i){ return "translate(0, " + i * 20 + ")"; });
 
 legend.append('rect')
-	.attr('x', width - 18)
-	.attr('width', 18)
-	.attr('height', 18)
+	.attr('x', width - 20)
+	.attr('width', 15)
+	.attr('height', 15)
 	.attr("y", 20)
 	.attr("fill", color);
 

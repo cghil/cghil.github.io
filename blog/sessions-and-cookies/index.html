@@ -22,6 +22,54 @@
                 <p>Much of internet security is centered around protecting the user and the user's information. In building web apps, there are two main ways to store that information: cookies and sessions. Here let's go over a few quick differences of the two, and delve into the high level of protecting your users against some of these attacks.</p>
                 <h3>Sessions</h3>
                 <p>One thing that makes a session different is that the session is deleted <strong>when the user closes the browser</strong>.</p>
+                <p>
+                    How? Well, sessions uses a temporary cookie on the user's browser to store information -- usually it's an encrypted version of the user's id. In a Rails application, the client would pass this encrypted user id back to the server --where the server would decrypt it and query the right id.
+
+                    As per usual protocol, the session is created and destroyed when logging-in and logging-out.
+                </p>
+                <h3>Cookies</h3>
+                <p>
+                    Cookies persist even <strong>after the browser closes</strong>. Moreover, cookies persist while the users navigates from one page to the next.
+                </p>
+                <p>
+                    Unfortunately, users can block or delete cookies -- making cookie-based features useless.
+                </p>
+                <h4>Attacking Cookies</h4>
+                <p>
+                    Unlike Sessions, Cookies are not automatically secure. There are 4 main ways cookies can be compromised:
+                </p>
+                <ol>
+                    <li>Using a packet sniffer to detect and decode cookies passing over an insecure network</li>
+                    <li>Compromising a database with remember tokens</li>
+                    <li>Using a cross-site scripting (XSS)</li>
+                    <li>Gaining physical access to a machine with a logged in user.</li>
+                </ol>
+                <p>To prevent these attacks, you can respectively:</p>
+                <ol>
+                    <li>Ensure you're using a Secure Socket Layer (SSL) or Transfer Layer Security (TLS).</li>
+                    <li>Store a hash digest of the remember token instead of the token itself.</li>
+                    <li>Rails prevents escaping any content inserted into the view templates.</li>
+                    <li>Change tokens every time a user logs out.</li>
+                </ol>
+                <h4>XSS versus XSRF</h4>
+                <p>
+                    Cross-site scripting (XSS) enables attackers to inject client-side scripts into web pages that the user trusts (like through a form's comments). A XSS vulnerability may be used to let attackers bypass access controls such as the same-origin policy.
+                </p>
+                <p>
+                    Cross-site request forgery (XSRF), or one-click attack, exploits the trust a site has in a user's browser. While authenticated on a website (like a bank website), the user might accidentally click on a script that instigates the XSRF attack. See more <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">heres</a>.
+                </p>
+                <h4>Implementing a cookie</h4>
+                <ol>
+                    <li>Create a random string of digits for use as a remember token.</li>
+                    <li>Place the token in the browser cookies with an expiration date far in the future.</li>
+                    <li>Save the hash digest of the token to the database.</li>
+                    <li>Place an encrypted version of the user’s id in the browser cookies.</li>
+                    <li>When presented with a cookie containing a persistent user id, find the user in the database using the given id, and verify that the remember token cookie matches the associated hash digest from the database.</li>
+                    <li>(Optional) Store the expiration date of the cookie and check against it.</li>
+                </ol>
+                <p>More on security!</p>
+                <a href="https://www.railstutorial.org/book/log_in_log_out">Rails Tutorial, </a>
+                <a href="More on Security">Salting a Password Hash</a>
             </div>
             <a class="home-link back-link" href="/"><i class="fa fa-chevron-left"></i> Back</a>
         </div>
