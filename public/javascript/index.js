@@ -31,7 +31,7 @@ root.fixed = true;
 
 var color = d3.scale.ordinal()
 	.domain(["competent in", "learning", "prior experience"])
-	.range(["#17becf", "#ff7f0e", "#bcbd22"])
+	.range(["#17becf", "#ff7f0e", "#bcbd22"]);
 
 var force = d3.layout.force()
 	.gravity(0.05)
