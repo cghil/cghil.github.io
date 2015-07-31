@@ -11,24 +11,27 @@ var margin = {top: 40}
 var width = 960,
 	height = 500;
 
-var nodes = [{radius: 45, category:"learning", skill: "SVG"}, {radius: 45, category: "competent", skill: "Ruby"}, {radius: 45, category: "competent", skill:"JavaScript"},
-	{radius: 45, category: "competent", skill: "JQuery"}, {radius: 45, category: "competent", skill: "Underscore"}, 
-	{radius: 45, category: "competent", skill: "Ajax"}, {radius: 45, category: "competent", skill: "Git"}, {radius: 45, category: "competent", skill: "ActiveRecord"}, 
-	{radius: 45, category: "competent", skill: "Rails"}, {radius: 45, category: "competent", skill: "Sinatra"}, {radius: 45, category: "competent", skill: "Rspec"}, 
-	{radius: 45, category: "competent", skill: "HTML5"}, {radius: 45, category: "competent", skill:"CSS3"}, {radius: 45, category:"competent", skill: "Bootstrap"}, 
-	{radius: 45, category: "prior experience", skill: "STATA"}, {radius: 45, category: "competent", skill: "SQL"}, {radius: 45, category: "competent", skill: "PostgreSQL"}, 
-	{radius: 45, category: "competent", skill: "SQLite"}, {radius: 45, category: "competent", skill: "Heroku"}, {radius: 45, category: "learning", skill: "Node"}, 
-	{radius: 45, category: "competent", skill: "Command Line"},{radius: 45, category: "learning", skill: "D3js"}, {radius: 45, category: "learning", skill: "Express"}, 
+var nodes = [{radius: 45, category:"learning", skill: "SVG"}, {radius: 45, category: "competent in", skill: "Ruby"}, {radius: 45, category: "competent in", skill:"JavaScript"},
+	{radius: 45, category: "competent in", skill: "JQuery"}, {radius: 45, category: "competent in", skill: "Underscore"}, 
+	{radius: 45, category: "competent in", skill: "Ajax"}, {radius: 45, category: "competent in", skill: "Git"}, {radius: 45, category: "competent in", skill: "ActiveRecord"}, 
+	{radius: 45, category: "competent in", skill: "Rails"}, {radius: 45, category: "competent in", skill: "Sinatra"}, {radius: 45, category: "competent in", skill: "Rspec"}, 
+	{radius: 45, category: "competent in", skill: "HTML5"}, {radius: 45, category: "competent in", skill:"CSS3"}, {radius: 45, category:"competent in", skill: "Bootstrap"}, 
+	{radius: 45, category: "prior experience", skill: "STATA"}, {radius: 45, category: "competent in", skill: "SQL"}, {radius: 45, category: "competent in", skill: "PostgreSQL"}, 
+	{radius: 45, category: "competent in", skill: "SQLite"}, {radius: 45, category: "competent in", skill: "Heroku"}, {radius: 45, category: "learning", skill: "Node"}, 
+	{radius: 45, category: "competent in", skill: "Command Line"},{radius: 45, category: "learning", skill: "D3js"}, {radius: 45, category: "learning", skill: "Express"}, 
 	{radius: 45, category: "learning", skill: "Mongoose"}, {radius: 45, category: "learning", skill: "MongoDB"}, {radius: 45, category: "learning", skill: "MongoLab"}, 
 	{radius: 45, category: "learning", skill: "Backbone"}, {radius: 45, category: "prior experience", skill: "AngularJS"}, {radius: 45, category: "learning", skill: "Docker"}];
 
 d3.shuffle(nodes)
 nodes.unshift({radius: 0})
 
-var root = nodes[0],
-	color = d3.scale.category10();
+var root = nodes[0];
 
 root.fixed = true;
+
+var color = d3.scale.ordinal()
+	.domain(["competent in", "learning", "prior experience"])
+	.range(["#17becf", "#ff7f0e", "#bcbd22"])
 
 var force = d3.layout.force()
 	.gravity(0.05)
@@ -55,10 +58,10 @@ dataNodes.append("circle")
 	.style("fill", function(d, i){
 		if(d.category === "learning"){
 			return "#ff7f0e";
-		} else if (d.category === "competent"){
-			return "#1f77b4";
+		} else if (d.category === "competent in"){
+			return "#17becf";
 		} else if (d.category === "prior experience"){
-			return "#2ca02c";
+			return "#bcbd22";
 		} else {
 			return "#d62728";
 		}
@@ -83,18 +86,27 @@ force.on("tick", function(){
 		.attr("dy", function(d){ return d.y; })
 });
 
-// var title = [{title: "title"}];
+ 
+var legend = svg.selectAll("g.legend")
+	.data(color.domain().slice())
+	.enter().append('g')
+		.attr('class', "legend")
+		.attr('fill', "white")
+		.attr("transform", function(d, i){ return "translate(0, " + i * 20 + ")"; });
 
-// var text = svg.selectAll("text#title")
-// 	.data(title)
-// 	.append("text")
-// 	.attr("id", "title")
-// 	.attr("x", (width/2))
-// 	.attr("y", 0 - (margin.top/2))
-// 	.attr("text-anchor", "middle")
-// 	.style("font-size", "16px")
-// 	.text(function(d){ return d.title })
+legend.append('rect')
+	.attr('x', width - 18)
+	.attr('width', 18)
+	.attr('height', 18)
+	.attr("y", 20)
+	.attr("fill", color);
 
+legend.append("text")
+	.attr("x", width - 24)
+	.attr("y", 35)
+	.attr("dy", ".35em")
+	.style("text-anchor", "end")
+	.text(function(d){ return d; });
 
 svg.on("mousemove", function() {
   var p1 = d3.mouse(this);

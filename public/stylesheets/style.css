@@ -25,6 +25,10 @@ body {
 	background-color: #5AA48B;
 }
 
+#visual > .container {
+	height: 500px;
+}
+
 footer {
 	background-color: #ffffff;
 }
