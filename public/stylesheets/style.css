@@ -31,6 +31,7 @@ body {
 
 footer {
 	background-color: #ffffff;
+	margin-bottom: 5px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -212,7 +213,7 @@ i:hover{
 	}
 
 	p {
-	  font-size: 2vmin;
+	  font-size: 2.5vmin;
 	}
 
 	.profile {
@@ -238,6 +239,10 @@ i:hover{
 
 	h3.copy {
 		font-size: 2vh;
+	}
+
+	.welcome > p {
+		font-size: 3vmin;
 	}
 }
 
