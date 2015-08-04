@@ -4,6 +4,13 @@
     font-weight: lighter;
 }
 
+.profile-picture {
+	width: auto;
+	height: auto;
+/*	max-width: 300px;*/
+	max-height: 200px;
+}
+
 body {
 	font-family: "ProximaNova-Light", sans-serif;
 }
