@@ -194,6 +194,27 @@ i:hover{
 }
 
 @media (max-width: 990px) {
+	
+	h1 {
+  	font-size: 6vh;
+	}
+
+	h2 {
+	  font-size: 4vh;
+	}
+
+	h3 {
+		font-size: 4vh;
+	}
+
+	h5 {
+		font-size: 3vh;
+	}
+
+	p {
+	  font-size: 2vmin;
+	}
+
 	.profile {
 		margin-top: 5vh;
 		margin-bottom: 5vh;
@@ -213,6 +234,10 @@ i:hover{
 	}
 	.project {
 		margin-bottom: 3vh;
+	}
+
+	h3.copy {
+		font-size: 2vh;
 	}
 }
 
