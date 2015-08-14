@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>South Park Game</title>
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/southpark.css">
+    <link rel="shortcut icon" href="../../public/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="headline">
+            <h1>Who killed Kenny?</h1>
+            <p>Here are the suspects. Your job is to sort them from who you think is the most likely to leastly, by clicking on the suspect.</p>
+        </div>
+        <div class="text-center" id="characters">
+            <div class="tile">
+                <p class="name">Stan</p>
+                <div id="stan"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Kyle</p>
+                <div id="kyle"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Kenny</p>
+                <div id="kenny"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Cartman</p>
+                <div id="cartman"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Wendy</p>
+                <div id="wendy"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Ike</p>
+                <div id="ike"></div>
+            </div>
+            <div class="tile">
+                <p class="name">Tweek</p>
+                <div id="tweek"></div>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center list-of-suspects">
+        </div>
+        <button type="button">Reset</button>
+    </div>
+    <script type="text/javascript" src="../../public/javascript/jquery.js"></script>
+    <script type="text/javascript" src="../../public/javascript/underscore.js"></script>
+    <script type="text/javascript" src="../../public/javascript/southpark.js"></script>
+    <script type="text/template" id="tile-target">
+        <div class="tile">
+                <p class="name"><%=capitalizedName%></p>
+                <div id=<%=name%>></div>
+            </div>
+    </script>
+</body>
+
+</html>
