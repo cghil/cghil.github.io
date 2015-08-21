@@ -14,13 +14,13 @@ body {
 }
 
 #kyle {
-	background: url(../images/characters-sprite.png) -105px 0;
+	background: url(../images/characters-sprite.png) -207px 0;
 	background-repeat: no-repeat;
 	height: 150px;
 }
 
 #kenny {
-	background: url(../images/characters-sprite.png) -207px 0;
+	background: url(../images/characters-sprite.png) -619px 0;
 	background-repeat: no-repeat;
 	height: 150px;
 }
@@ -44,7 +44,7 @@ body {
 }
 
 #tweek {
-	background: url(../images/characters-sprite.png) -619px 0;
+	background: url(../images/characters-sprite.png) -105px 0;
 	height: 150px;
 	background-repeat: no-repeat;
 }
