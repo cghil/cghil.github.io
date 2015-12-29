@@ -160,7 +160,7 @@ i:hover{
 	height: 100%;
 }
 
-.info > a {
+.info {
 	color: black;
 }
 
@@ -253,8 +253,12 @@ i:hover{
 	}
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 960px) {
 	#visual {
 		display: none;
 	}
+}
+
+.hide {
+	display: none;
 }
