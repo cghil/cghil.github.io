@@ -1,0 +1,74 @@
+html, body {
+  height: 100%;
+  width:  100%;
+  padding: 0;
+  margin:  0;
+  background-color: white;
+  color: #666;
+  font-family: 'Libre Baskerville' serif;
+}
+
+.container {
+  width: 376px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.title {
+  font-family: 'Montserrat' sans-serif;
+  margin-bottom: 5px;
+}
+
+.sudoku-grid {
+  height: 376px;
+}
+
+.sudoku-grid .cell {
+  height: 38px;
+  width:  38px;
+  float: left;
+  border: 1px solid #666;
+  line-height: 38px;
+  text-align: center;
+}
+
+.sudoku-grid .cell:hover {
+  cursor: pointer;
+  background-color: rgba(217, 231, 0, 0.3);
+}
+
+.sudoku-grid .active.cell {
+  background-color: rgba(217, 231, 0, 0.5);
+}
+
+.sudoku-grid .cell:nth-child(9n + 1) { clear:        both           }
+.sudoku-grid .cell:nth-child(-n + 9) { border-top:   5px solid #666 }
+.sudoku-grid .cell:nth-child(3n - 2) { border-left:  5px solid #666 }
+.sudoku-grid .cell:nth-child(9n)     { border-right: 5px solid #666 }
+
+.sudoku-grid .cell:nth-child(n + 19):nth-child(-n + 27),
+.sudoku-grid .cell:nth-child(n + 46):nth-child(-n + 54),
+.sudoku-grid .cell:nth-child(n + 73) {
+  border-bottom: 5px solid #666
+}
+
+.options {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.options .option {
+  margin-bottom: 5px;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #aaa;
+}
+
+a:hover {
+  color: #666;
+}

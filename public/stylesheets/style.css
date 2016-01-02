@@ -253,7 +253,15 @@ i:hover{
 	}
 }
 
-@media (max-width: 960px) {
+.margin-top-5vh {
+	margin-top: 5vh;
+}
+
+.margin-bottom-5vh {
+	margin-bottom: 5vh;
+}
+
+@media (max-width: 1000px) {
 	#visual {
 		display: none;
 	}
