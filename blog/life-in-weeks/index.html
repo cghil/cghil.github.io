@@ -8,16 +8,23 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
   </head>
   <body>
-
-    <div class="text-center">
-      <div id="viz">
+    <div class="container">
+      <form>
+        Choose Life Length (between 50 and 99)
+        <input type="number", name="life-length" min="50" max="99">
+        DOB:
+        <input type="date" name="date-of-birth">
+      </form>
+      <div class="text-center">
+        <div id="viz">
+        </div>
       </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
-    <script src="/javascripts/vendor/moment.js"></script>
+    <script src="/javascripts/model/data.js"></script>
     <script src="/javascripts/app.js"></script>
-    <script src="/javascripts/practice.js"></script>
+    <!-- // <script src="/javascripts/practice.js"></script> -->
 
     <noscript>
       This site requires javascript to run properly.  Please enable javascript

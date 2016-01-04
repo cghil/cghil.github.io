@@ -1,8 +1,8 @@
-var width = 550,
+var width = 600,
 	height = 1000;
 
-var square = 10,
-	date = "03/25/1991";
+var square = 7,
+	date = "1991-10-25";
 
 var averageLifeInYears = 72;
 
@@ -12,7 +12,7 @@ var computeWeeksForANumberOfYears = function(value){
 	return answer;
 };
 
-function compDate(year, month, day){
+function currentWeeksLived(year, month, day){
 	var dateOne = new Date(year, month, day);
 	var dateTwo = new Date();
 	var numberOfWeeks = (dateTwo-dateOne)/(1000*60*60*24*7).toFixed(2);
@@ -21,20 +21,36 @@ function compDate(year, month, day){
 
 var averageLifeInWeeks = computeWeeksForANumberOfYears(averageLifeInYears);
 
+function computeWeekData(date, lifeLengthInWeeks){
+
+	var day = date.slice(-2);
+	var month = date.slice(5, 7);
+	var year = date.slice(0, 4);
+	var weeksLived = currentWeeksLived(year, month, day);
+	var weekData = [];
+	
+	for (var week=0; week<lifeLengthInWeeks; week++){
+		var weekObject = {weekId: week};
+		if (week <= weeksLived){
+			weekObject.category = "lived"
+		} else {
+			weekObject.category = "not lived"
+		}
+	weekData.push(weekObject);
+	}
+
+	return weekData;
+};
+
+var weekData = computeWeekData(date, averageLifeInWeeks);
+
 var color = d3.scale.ordinal()
 	.domain(["not lived", "lived"])
-	.range(["#17becf", "#ff7f0e"]);
+	.range(["#d3d3d3", "#17becf"]);
 
 var svg = d3.select('div#viz').append('svg')
 	.attr("width", width)
 	.attr("height", height);
-
-var weekData = [];
-
-for (var weeks = 0; weeks< averageLifeInWeeks; weeks++){
-	var weekObject = {category: "not lived", weekId: weeks};
-	weekData.push(weekObject);
-};
 
 
 function xPlotter(lastDigit){
@@ -50,8 +66,6 @@ function xPlotter(lastDigit){
 			compare = compare.slice(-2);
 		} else if(compare.length === 3){
 			compare = compare.slice(-1);
-		} else {
-			compare = 1;
 		}
 	}
 	return (starter * square) + starter;
@@ -82,23 +96,29 @@ var weekNodes = svg.append('g')
 					var isLargeNumber = false;
 				}
 
-				if (string.length >= 4 && isLargeNumber===false){
-					var lastDigit = string.slice(-2);
-				} else if(string.length === 3 || isLargeNumber){
-					var lastDigit = string.slice(-1);
-				} else {
+				if(weekNumDividedBy50 == Math.round(weekNumDividedBy50)){
 					var lastDigit = 1;
+					return 400;
+				} else {
+					if (string.length >= 4 && isLargeNumber===false){
+						var lastDigit = string.slice(-2);
+					} else if(string.length === 3 || isLargeNumber){
+						var lastDigit = string.slice(-1);
+					} else {
+						var lastDigit = 1;
+					}
+					return xPlotter(lastDigit);
 				}
-
-				return xPlotter(lastDigit);
 			},
 			y: function(d, i){
 				var weekNum = i + 1;
-				var dividedBy75 = weekNum/75;
-				dividedBy75 = Math.ceil(dividedBy75);
-				return (square * dividedBy75) + dividedBy75;
+				var dividedBy50 = weekNum/50;
+				return (square * dividedBy50) + dividedBy50;
 			}
 		})
 		.style("fill", function(d){
-			return color(d.category)
+			return color(d.category);
+		})
+		.attr("category", function(d){
+			return d.category;
 		});

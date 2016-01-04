@@ -1,23 +1,11 @@
 var myLifeVisualized = myLifeVisualized || {};
 
-myLifeVisualized.svgModule = (function(){
-	var width = 960,
-		height = 960;
-
-	var setSvgElement = function(){
-		var svg = d3.select("div#viz").append("svg")
-			.attr("width", width)
-			.attr("height", height)
-	}
-
+myLifeVisualized.view = function(){
+	
+	
 	return {
 
-		giveWidth: function(){
-			return width;
-		},
+	};
+}();
 
-		giveHeight: function(){
-			return height;
-		}
-	}
-});
+var nodes = myLifeVisualized.model.setUpModel("1991-10-25", 72);
