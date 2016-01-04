@@ -1,3 +1,5 @@
+var myLifeVisualized = myLifeVisualized || {};
+
 myLifeVisualized.model = function(){
 	
 	var computeLifeLengthInWeeks = function(year){

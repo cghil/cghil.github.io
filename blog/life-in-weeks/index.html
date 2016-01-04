@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Your Life In Weeks</title>
-
     <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville|Montserrat:400' rel='stylesheet' type='text/css'>
-
     <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
-  </head>
-  <body>
-    <div class="container">
-      <form>
-        Choose Life Length (between 50 and 99)
-        <input type="number", name="life-length" min="50" max="99">
-        DOB:
-        <input type="date" name="date-of-birth">
-      </form>
-      <div class="text-center">
-        <div id="viz">
-        </div>
-      </div>
-    </div>
+</head>
 
+<body>
+    <div class="container">
+        <div class="heading">
+            <h3 class="title">Your Life In Weeks</h3>
+            <p class="subtitle">
+                Born <span class="date">04/25/1991</span> with a life expectancy of <span class="expectancy">72</span> years
+            </p>
+            <form>
+                <label class="label">Date of Birth:</label>
+                <input class="field" type="text" placeholder="03/25/1991" name="date-of-birth">
+                <label class="label">Life Expectancy:</label>
+                <input class="field" type="text" placeholder="1-99">
+            </form>
+        </div>
+        <div class="text-center" id="viz">
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="/javascripts/model/data.js"></script>
+    <script src="/javascripts/views/graph.js"></script>
     <script src="/javascripts/app.js"></script>
     <!-- // <script src="/javascripts/practice.js"></script> -->
-
     <noscript>
-      This site requires javascript to run properly.  Please enable javascript
-      in your browser.
+        This site requires javascript to run properly. Please enable javascript in your browser.
     </noscript>
-  </body>
+</body>
+
 </html>
