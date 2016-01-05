@@ -17,9 +17,10 @@ myLifeVisualized.model = function(){
 	};
 
 	var computeWeekData = function(date, lifeLengthInWeeks){
-		var day = date.slice(-2),
-			month = date.slice(5,7),
-			year = date.slice(0,4);
+
+		var year = date.slice(-4),
+			month = date.slice(0,2),
+			day = date.slice(3, 5);
 
 		var weeksLived = currentWeeksLived(year, month, day);
 

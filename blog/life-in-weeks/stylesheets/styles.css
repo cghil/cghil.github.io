@@ -32,6 +32,13 @@ html, body {
     font-size: 12px;
 }
 
+.instructions {
+	margin-bottom: 0px;
+/*	margin-top: 0px;*/
+	font-size: 12px;
+	color: #aaa;
+}
+
 .label {
   font-size: 12px;
   color: #aaa;
