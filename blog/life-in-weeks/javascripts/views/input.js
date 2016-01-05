@@ -77,7 +77,6 @@ myLifeVisualized.inputFromUser = function() {
 
         test: function() {
             enter();
-            console.log('hello i am test');
         }
 
     };
