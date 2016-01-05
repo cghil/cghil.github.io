@@ -1,7 +1,7 @@
 myLifeVisualized.graph = function() {
 
     var width = 410,
-        height = 900,
+        height = 825,
         square = 7;
 
     var createSVG = function() {
