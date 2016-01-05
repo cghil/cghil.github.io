@@ -17,9 +17,9 @@ myLifeVisualized.inputFromUser = function() {
         myLifeVisualized.graph.createGraphic(nodes);
     };
 
-    function checkIfNumBetween50and95(string) {
+    function checkIfNumBetween1and95(string) {
         var num = parseInt(string);
-        if (isNaN(num) === true || num < 50 || num > 95) {
+        if (isNaN(num) === true || num < 1 || num > 95) {
             return false;
         } else {
             return true;
@@ -46,7 +46,7 @@ myLifeVisualized.inputFromUser = function() {
                     var age = $lifeExpInput.val().trim();
                     console.log(age)
                     if (checkIfDateIsDate(date)) {
-                        if (checkIfNumBetween50and95(age)) {
+                        if (checkIfNumBetween1and95(age)) {
                             changeGraphic(date, age);
                         } else {
                             changeGraphic(date, 72);
@@ -60,7 +60,7 @@ myLifeVisualized.inputFromUser = function() {
                     e.preventDefault();
                     var age = $lifeExpInput.val().trim();
                     var date = $DOBinput.val().trim();
-                    if (checkIfNumBetween50and95(age)) {
+                    if (checkIfNumBetween1and95(age)) {
                         if (checkIfDateIsDate(date)) {
                             changeGraphic(date, age);
                         } else {
