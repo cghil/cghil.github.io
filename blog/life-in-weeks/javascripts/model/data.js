@@ -23,6 +23,8 @@ myLifeVisualized.model = function(){
 			day = date.slice(3, 5);
 
 		var weeksLived = currentWeeksLived(year, month, day);
+		
+		var percentageOfLifeLived = (weeksLived/lifeLengthInWeeks) * 100;
 
 		var weekData = [];
 
@@ -36,14 +38,20 @@ myLifeVisualized.model = function(){
 			weekData.push(weekObject);
 		};
 
-		return weekData;
+		return { 
+			data: weekData,
+			percentageOfLife: percentageOfLifeLived
+		};
 	};
 
 	return {
 		setUpModel: function(DOB, lifeExpectancy){
 			var lifeExpInWeeks = computeLifeLengthInWeeks(lifeExpectancy);
-			var data = computeWeekData(DOB, lifeExpInWeeks);
-			return data;
+			var information = computeWeekData(DOB, lifeExpInWeeks);
+			return {
+				data: information.data,
+				percentage: information.percentageOfLife
+			};
 		}
 	};
 

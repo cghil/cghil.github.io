@@ -12,8 +12,10 @@ myLifeVisualized.inputFromUser = function() {
     function changeGraphic(date, age) {
         removeGraphic();
         var age = parseInt(age);
-        changeText(date, age);
-        var nodes = myLifeVisualized.model.setUpModel(date, age);
+        var information = myLifeVisualized.model.setUpModel(date, age);
+        var nodes = information.data;
+        var percentage = information.percentage.toFixed(2);
+        changeText(date, age, percentage);
         myLifeVisualized.graph.createGraphic(nodes);
     };
 
@@ -31,9 +33,10 @@ myLifeVisualized.inputFromUser = function() {
         return isDate;
     };
 
-    function changeText(date, age) {
+    function changeText(date, age, percentage) {
         $('span.expectancy').text(age);
         $('span.date').text(date);
+        $('#percentage').text(percentage + "%")
     };
 
     function enter() {

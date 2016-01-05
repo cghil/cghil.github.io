@@ -32,9 +32,12 @@ html, body {
     font-size: 12px;
 }
 
+.badge-info {
+	margin: 0px 0px 0px 0px;
+}
+
 .instructions {
 	margin-bottom: 0px;
-/*	margin-top: 0px;*/
 	font-size: 12px;
 	color: #aaa;
 }
@@ -42,6 +45,12 @@ html, body {
 .label {
   font-size: 12px;
   color: #aaa;
+}
+
+.badge {
+	position: absolute;
+	top: 350px;
+	right: 425px;
 }
 
 .field { font-family: inherit }
