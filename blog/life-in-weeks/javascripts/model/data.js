@@ -31,7 +31,7 @@ myLifeVisualized.model = function(){
 			if(week <= weeksLived){
 				weekObject.category = "lived";
 			} else {
-				weekObject = "not lived";
+				weekObject.category = "not lived";
 			}
 			weekData.push(weekObject);
 		};
