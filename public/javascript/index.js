@@ -20,7 +20,7 @@ var nodes = [{radius: 45, category:"learning", skill: "SVG"}, {radius: 45, categ
 	{radius: 45, category: "competent in", skill: "SQLite"}, {radius: 45, category: "competent in", skill: "Heroku"}, {radius: 45, category: "learning", skill: "Node"}, 
 	{radius: 45, category: "competent in", skill: "Command Line"},{radius: 45, category: "learning", skill: "D3js"}, {radius: 45, category: "learning", skill: "Express"}, 
 	{radius: 45, category: "learning", skill: "Mongoose"}, {radius: 45, category: "learning", skill: "MongoDB"}, {radius: 45, category: "learning", skill: "MongoLab"}, 
-	{radius: 45, category: "learning", skill: "Backbone"}, {radius: 45, category: "prior experience", skill: "AngularJS"}, {radius: 45, category: "learning", skill: "Docker"}];
+	{radius: 45, category: "learning", skill: "Backbone"}, {radius: 45, category: "competent in", skill: "AngularJS"}, {radius: 45, category: "learning", skill: "Docker"}];
 
 d3.shuffle(nodes)
 nodes.unshift({radius: 0})
