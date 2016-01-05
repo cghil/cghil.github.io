@@ -48,9 +48,9 @@ html, body {
 }
 
 .badge {
-	position: absolute;
-	top: 350px;
-	right: 425px;
+	position: relative;
+	top: -620px;
+	right: -425px;
 }
 
 .field { font-family: inherit }
