@@ -37,6 +37,10 @@ myLifeVisualized.graph = function() {
     };
 
     function addWeekDataToGraph(svg, data) {
+        var tooltip = d3.select('body').append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
+
         var weekRects = svg.append('g')
             .attr('class', 'weeks')
             .selectAll('rect')
@@ -90,6 +94,38 @@ myLifeVisualized.graph = function() {
             })
             .attr('category', function(d) {
                 return d.category;
+            })
+            .on("mouseover", function(d){
+                var DOB = d3.select(".date").text();
+                function styleToolTip(tooltip, pixel){
+                    tooltip.style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - pixel) + "px");
+                }
+
+                var category = d.category,
+                    weekNum = parseInt(d.weekId) + 1;
+
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+
+                if (category=="lived"){
+                    tooltip.html("Weeks Lived" + "<br>" + weekNum);
+                    styleToolTip(tooltip, 38);
+                } else {
+                    var weeksLived = myLifeVisualized.model.currentWeeksLived(DOB);
+                    var weeksUntil = weekNum - weeksLived -1;
+                    tooltip.html(weeksUntil + " weeks until this point.");
+                    styleToolTip(tooltip, 38);
+                }
+                // tooltip.html("Week" +"<br>" + (parseInt(d.weekId) + 1))
+                //     .style("left", (d3.event.pageX) + "px")
+                //     .style("top", (d3.event.pageY -38) + "px");
+            })
+            .on("mouseout", function(d){
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
             });
     };
 
