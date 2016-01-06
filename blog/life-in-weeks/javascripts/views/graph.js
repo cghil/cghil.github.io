@@ -110,7 +110,7 @@ myLifeVisualized.graph = function() {
                     .style("opacity", .9);
 
                 if (category=="lived"){
-                    tooltip.html("Weeks Lived" + "<br>" + weekNum);
+                    tooltip.html("Week" + "<br>" + weekNum);
                     styleToolTip(tooltip, 38);
                 } else {
                     var weeksLived = myLifeVisualized.model.currentWeeksLived(DOB);
