@@ -52,6 +52,12 @@ myLifeVisualized.model = function(){
 				data: information.data,
 				percentage: information.percentageOfLife
 			};
+		},
+		currentWeeksLived: function(date){
+			var year = date.slice(-4),
+				month = date.slice(0,2),
+				day = date.slice(3, 5);
+			return currentWeeksLived(year, month, day);
 		}
 	};
 
