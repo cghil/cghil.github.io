@@ -21,6 +21,11 @@ function selectLineUp(){
 }
 
 function resetButton(){
+	woopra.track('reset_southpark_game', {
+		url: window.location.pathname,
+		title: document.title
+	});
+	
 	$('.tile').remove();
 	var cardTemplate = $('#tile-target').html();
 	characters.forEach(function(character){
