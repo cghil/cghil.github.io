@@ -18,7 +18,7 @@ analytics.mouseOverTracker = (function(){
 	var playingWithGraph = function(){
 
 		function logIt(){
-			woopra.track('playWithInfoGraph', {
+			woopra.track('interact_with_skills_graph', {
 				url: window.location.pathname,
 				title: document.title
 			})
