@@ -1,0 +1,7 @@
+<h1>{{bookmarksListCtrl.currentCategoryName}}</h1>
+<div ng-repeat="bookmark in bookmarksListCtrl.bookmarks | filter: {category:bookmarksListCtrl.getCurrentCategoryName()}">
+	<button type="button" class="close">&times;</button>
+	<button type="button" class="btn btn-link"><span class="glyphicon glyphicon-pencil"></span>
+    </button>
+	<a href="{{bookmark.url}}" target="_blank">{{bookmark.title}}</a>
+</div>

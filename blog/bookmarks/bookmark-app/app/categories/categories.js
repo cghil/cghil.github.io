@@ -8,8 +8,12 @@ angular.module('categories', [
             url: '/',
             views: {
                 'categories@': {
-                    controller: 'CategoriesListCtrl as CategoriesListCtrl',
+                    controller: 'CategoriesListCtrl as categoriesListCtrl',
                     templateUrl: 'app/categories/categories.html'
+                },
+                'bookmarks@': {
+                    controller: 'BookmarksListCtrl as bookmarksListCtrl',
+                    templateUrl: 'app/categories/bookmarks/bookmarks.html'
                 }
             }
         })
@@ -17,9 +21,10 @@ angular.module('categories', [
 
 .controller('CategoriesListCtrl', ['CategoriesModel', function(CategoriesModel) {
     var categoriesListCtrl = this;
+    
     CategoriesModel.getCategories()
         .then(function(result) {
-            categoriesListCtrl.result = result;
-            console.log(result)
+            categoriesListCtrl.categories = result;
         });
-}])
+
+}]);
