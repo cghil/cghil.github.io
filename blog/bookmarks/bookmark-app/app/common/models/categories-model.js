@@ -56,4 +56,11 @@ angular.module('app.models.categories', [])
 
         return deferred.promise;
     };
+
+    model.createCategory = function(category){
+        var lastIndex = categories[categories.length - 1].id;
+        category.id = lastIndex + 1;
+        categories.push(category);
+    };
+
 }])

@@ -8,7 +8,7 @@ angular.module('categories.bookmarks', [
 .config(['$stateProvider',function($stateProvider) {
 	$stateProvider
 		.state('app.categories.bookmarks', {
-			url: 'categories/:categories',
+			url: 'categories/:category',
 			views: {
 				'bookmarks@': {
 					templateUrl: 'app/categories/bookmarks/bookmarks.html',
@@ -21,14 +21,15 @@ angular.module('categories.bookmarks', [
 .controller('BookmarksListCtrl', ['$stateParams', 'BookmarksModel', 'CategoriesModel', function($stateParams,BookmarksModel, CategoriesModel){
 
 	var bookmarksListCtrl = this;
-	
+
+	CategoriesModel.setCurrentCategory($stateParams.category);
+
 	BookmarksModel.getBookmarks()
 		.then(function(bookmarks){
 			bookmarksListCtrl.bookmarks = bookmarks;
-			console.log(bookmarks)
 		});
 
-	// bookmarksListCtrl.getCurrentCategory = CategoriesModel.getCurrentCategory;
-	// bookmarksListCtrl.getCurrentCategoryName = CategoriesModel.getCurrentCategoryName;
+	bookmarksListCtrl.getCurrentCategory = CategoriesModel.getCurrentCategory;
+	bookmarksListCtrl.getCurrentCategoryName = CategoriesModel.getCurrentCategoryName;
 
 }]);

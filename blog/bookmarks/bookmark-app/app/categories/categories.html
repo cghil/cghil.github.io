@@ -3,6 +3,6 @@
         <a ui-sref="app.categories">Pocket Bookmark</a>
     </li>
     <li ng-repeat="category in categoriesListCtrl.categories">
-    	<a href="#">{{category.name}}</a>
+    	<a ui-sref="app.categories.bookmarks({category: category.name})">{{category.name}}</a>
     </li>
 </ul>
