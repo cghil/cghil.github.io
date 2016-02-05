@@ -25,4 +25,8 @@ angular.module('app.models.bookmarks', [
 		return (bookmarks) ? $q.when(bookmarks) : $http.get(URLS.FETCH).then(cacheBookmarks);
 	};
 
+	model.createBookmark = function(bookmark){
+		
+	}
+
 }])

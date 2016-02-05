@@ -61,6 +61,7 @@ angular.module('app.models.categories', [])
         var lastIndex = categories[categories.length - 1].id;
         category.id = lastIndex + 1;
         categories.push(category);
+        // console.log(categories);
     };
 
 }])

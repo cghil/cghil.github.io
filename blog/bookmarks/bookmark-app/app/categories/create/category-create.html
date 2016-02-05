@@ -1,0 +1,10 @@
+<hr>
+<form class="create-form form-small" role="form" ng-submit="createCategoryCtrl.createCategory(newCategory)">
+	<div class="form-group">
+		<label class="text-blue"for="newCategoryName">Enter New Category</label>
+		<input type="text" class="form-control form-input-small" id="newCategoryName" ng-model="createCategoryCtrl.newCategory.name" placeholder="Enter Name">
+	</div>
+	<button type="submit" class="btn btn-info btn-sm">Create</button>
+	<button type="button" class="btn btn-default btn-sm" ng-click="createCategoryCtrl.cancelCreating()">Cancel</button>
+</form>
+<hr>

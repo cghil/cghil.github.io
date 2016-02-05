@@ -1,5 +1,6 @@
 angular.module('categories', [
-    'app.models.categories'
+    'app.models.categories',
+    'categories.create'
 ])
 
 .config(['$stateProvider', function($stateProvider) {
@@ -17,14 +18,14 @@ angular.module('categories', [
                 }
             }
         })
+
 }])
 
 .controller('CategoriesListCtrl', ['CategoriesModel', function(CategoriesModel) {
     var categoriesListCtrl = this;
-    
+
     CategoriesModel.getCategories()
         .then(function(result) {
             categoriesListCtrl.categories = result;
         });
-
 }]);

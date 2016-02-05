@@ -18,7 +18,7 @@ angular.module('categories.bookmarks', [
 		})
 }])
 
-.controller('BookmarksListCtrl', ['$stateParams', 'BookmarksModel', 'CategoriesModel', function($stateParams,BookmarksModel, CategoriesModel){
+.controller('BookmarksListCtrl', ['$stateParams', 'BookmarksModel', 'CategoriesModel', function($stateParams, BookmarksModel, CategoriesModel){
 
 	var bookmarksListCtrl = this;
 
