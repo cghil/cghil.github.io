@@ -26,7 +26,15 @@ angular.module('app.models.bookmarks', [
 	};
 
 	model.createBookmark = function(bookmark){
-		
-	}
+		var lastIndex = bookmarks[bookmarks.length -1].id;
+		bookmark.id = lastIndex + 1;
+		bookmarks.push(bookmark);
+	};
+
+	model.deleteBookmark = function(bookmark){
+		_.remove(bookmarks, function(b){
+			return b.id == bookmark.id;
+		})
+	};
 
 }])
