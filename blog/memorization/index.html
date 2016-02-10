@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Out of Scope With Corey</title>
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/blog.css">
+    <link rel="stylesheet" type="text/css" href="../../public/stylesheets/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="public/prism.css">
+    <link rel="shortcut icon" href="../../public/images/favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
+            <div class="image">
+                <img class="resize img-responsive center-block" src="../../public/images/books.jpg"></img>
+            </div>
+            <div class="blog">
+                <h1 class="title">Memorization</h1>
+                <h4>7 / January / 16 <small>By Corey Ghilarduci</small></h4>
+                <a href="/"><h5><i class="fa fa-chevron-left"></i> Back</h5></a>
+                <hr>
+                <p>Algorithms. They are not my favorite thing, but I learn them. I want to talk about a algorithm technique called memorization. So here we go!</p>
+                <h3>What is memorization?</h3>
+                <p><strong>Memorization</strong> ensures that a function doesn't run for the same inputs more than once by keeping record of the results for given inputs (usually a hash)</p>
+                <h3>Example</h3>
+                <p>For example, a simple recursive function for outputing the <i>n</i>th fibonacci number:</p>
+                <pre class="language-ruby"><code class="language-ruby">
+def fib_recursive(n)
+    if n == 0 || n == 1
+        return n
+    end
+    puts "computing fib_recursive(#{n})"
+    return fib_recursive(n-1) + fib_recursive(n-2)
+end</code>
+                </pre>
+                <p>Will run on the same inputs multiple times:</p>
+                <pre class="command-line language-bash" data-user="happy" data-output="2-35"><code class="commandline language-bash">fib_recursive(8)
+computing fib_recursive(8)
+computing fib_recursive(7)
+computing fib_recursive(6)
+computing fib_recursive(5)
+computing fib_recursive(4)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(2)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(4)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(2)
+computing fib_recursive(5)
+computing fib_recursive(4)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(2)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(6)
+computing fib_recursive(5)
+computing fib_recursive(4)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(2)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(4)
+computing fib_recursive(3)
+computing fib_recursive(2)
+computing fib_recursive(2)
+=> 21</code></pre>
+        <p>Notice how our fibonacci function calls the same inputs over and over. For this reason, recursive solutions are normally awlful. In fact, this solution for fibonacci has a runtime of O(2^n). <strong>Is there are way to make this solution have a better runtime?</strong></p>
+        <h3>The Answer</h3>
+        <p>What if we stored the solution to each new fibonacci function? </p>
+        </div>
+            <a class="home-link back-link" href="/"><i class="fa fa-chevron-left"></i> Back</a>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <hr class="heavy"> &copy Corey Ghilarducci 2015
+        </div>
+    </footer>
+    <script src="/blog/memorization/public/prism.js"></script>
+</body>
+
+</html>

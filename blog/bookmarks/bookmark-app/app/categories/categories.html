@@ -1,0 +1,17 @@
+<ul class="sidebar-nav">
+    <li class="sidebar-brand">
+        <a ui-sref="app.categories">Pocket Bookmark</a>
+    </li>
+    <li class="category-name" ng-repeat="category in categoriesListCtrl.categories">
+        <a ui-sref="app.categories.bookmarks({category: category.name})">{{category.name}}</a>
+    </li>
+    <li>
+        <div ui-view="create">
+            <a href="#">
+                <button type="button" class="btn btn-link" ui-sref="app.categories.create">
+                    <span class="glyphicon glyphicon-plus"></span> Create Category
+                </button>
+            </a>
+        </div ui-view>
+    </li>
+</ul>
