@@ -10,7 +10,7 @@ angular.module('categories.bookmarks.edit', [
 		})
 }])
 
-.controller('EditBookmarkCtrl', ['$state', '$stateParams', 'BookmarkModel', function($state, $stateParams, BookmarkModel){
+.controller('EditBookmarkCtrl', ['$state', '$stateParams', 'BookmarksModel', function($state, $stateParams, BookmarksModel){
 	var editBookmarkCtrl = this;
 
 	function returnToBookmarks(){
@@ -22,6 +22,26 @@ angular.module('categories.bookmarks.edit', [
 	function updateBookmark(){
 		// we are copying the editBookmark
 		editBookmarkCtrl.bookmark = angular.copy(editBookmarkCtrl.editedBookmark);
-		
-	}
+		BookmarksModel.updateBookmark(editBookmarkCtrl.editedBookmark);
+		returnToBookmarks();
+	};
+
+	function cancelEditing(){
+		returnToBookmarks();
+	};
+
+	BookmarksModel.getBookmarkById($stateParams.bookmarkId)
+		.then(function(bookmark){
+			if (bookmark){
+				editBookmarkCtrl.bookmark = bookmark;
+				editBookmarkCtrl.editedBookmark = angular.copy(editBookmarkCtrl.bookmark);
+			} else {
+				returnToBookmarks();
+			}
+		})
+
+	editBookmarkCtrl.cancelEditing = cancelEditing;
+	editBookmarkCtrl.updateBookmark = updateBookmark;
+
+
 }])

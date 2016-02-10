@@ -28,4 +28,5 @@ angular.module('categories', [
         .then(function(result) {
             categoriesListCtrl.categories = result;
         });
+
 }]);
