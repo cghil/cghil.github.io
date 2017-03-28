@@ -1,21 +1,13 @@
 @font-face {
     font-family: ProximaNova-Light;
-    src: url('ProximaNova-Light.ttf') format('woff');
+    src: asset-url('Proxima Nova Light.eot');
+    src: asset-url('Proxima Nova Light.eot?#iefix') format('embedded-opentype'),
+      asset-url('ProximaNova-Light.ttf') format('truetype'),
+      asset-url('Proxima Nova Light.woff') format('woff'),
+      asset-url('Proxima Nova Light.svg#ProximaNova-Light') format('svg');
+
     font-weight: lighter;
 }
-/*@font-face {
-  font-family: 'IcoMoon';
-  src: url('fonts/icomoon.woff') format('woff');
-}
-
-[data-icon]:before {
-  font-family: 'IcoMoon';
-  content: attr(data-icon);
-  font-size: 1em;
-  color: #943634;
-    color: #16a085;
-
-}*/
 
 .fa {
   color: #16a085;
