@@ -1,6 +1,6 @@
 @font-face {
     font-family: ProximaNova-Light;
-    src: url(ProximaNova-Light.ttf);
+    src: url('ProximaNova-Light.ttf') format('woff');
     font-weight: lighter;
 }
 /*@font-face {
