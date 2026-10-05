@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Happens When You Type "Google.com?" · Corey Ghilarducci</title>
+  <meta name="description" content="A colloquial walkthrough of what happens when you type google.com — from DNS lookup through TCP, TLS, HTTP, and rendering.">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/stylesheets/site.css">
+  <link rel="stylesheet" href="/public/stylesheets/writing.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-mark" href="/">Corey Ghilarducci</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/writing/" aria-current="page">Writing</a>
+      <a href="/about/">About</a>
+      <a href="/resume/">Resume</a>
+      <a href="https://github.com/cghil">GitHub</a>
+      <a href="https://www.linkedin.com/in/coreyghilarducci/">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <article class="article">
+      <header class="article-header">
+        <a class="article-back" href="/writing/">← Writing</a>
+        <h1 class="article-title">What Happens When You Type "Google.com?"</h1>
+        <p class="article-meta">
+          <time datetime="2015-07-29">July 29, 2015</time>
+        </p>
+      </header>
+
+      <div class="article-body">
+        <p>If you're reading this, chances are you've come across answers to this question before. You've probably read this <a href="https://github.com/alex/what-happens-when">Github</a> page on the topic, then gave up. You may have also come across this <a href="http://igoro.com/archive/what-really-happens-when-you-navigate-to-a-url/">blog post</a>, which does a slightly better job.</p>
+        <p>Here's my take at it-- in colloquial terms.</p>
+
+        <h2>1. You type "google.com" into your browser</h2>
+
+        <h2>2. Your browser looks up the IP address (127.102...) for "google.com"</h2>
+        <ul>
+          <li><strong>Browser </strong>checks its <strong>cache</strong>... if not found</li>
+          <li><strong>Operating System</strong> (ex. OSX) <strong>cache</strong> is checked... if not found</li>
+          <li><strong>Router cache</strong> is checked (aka the piece of equipment that connects to your modem)... </li>
+          <li><strong>ISP's DNS cache</strong> is checked...</li>
+          <li>Domain Name Server's (DNS) Recursive Search occurs, pinging other DNS for Google's IP address</li>
+        </ul>
+
+        <h2>3. Boom... You got that IP address. The Browser opens a TCP connection (a socket)</h2>
+        <ul>
+          <li>If you made a request through <strong>HTTP</strong>, the TCP connection opens up on PORT 80</li>
+          <li>If <strong>HTTPS</strong>, the connection is opened on PORT 443</li>
+          <li>The socket is neccessary to send and recieve information</li>
+        </ul>
+
+        <h2>4. A Transport Layer Security (TLS) Handshake Occurs</h2>
+        <ul>
+          <li>A. The Client sends a ClientHello message with a list of specifications, like cipher and compression algorithms; the Server sends a ServerHello message with a chosen cipher and compression algorithm.</li>
+          <li>B. Server also sends a certificate signed by a <a href="https://en.wikipedia.org/wiki/Certificate_authority">Certificate Authority</a>; Client checks the CA for authenticity.</li>
+          <li>C. Client then creates pseudo-random bytes (uses this to determin a <strong>symmetric key</strong>), and encrpyts the bytes with the server's <em>public key</em>, Server decrypts the bytes using the <em>private key</em>, thereby creating its own copy of the <strong>symmetric key</strong>.</li>
+          <li>The TLS handshake is necessary to ensure the client and server are who they say they are. The <strong>symmetric key</strong> is now used for further transfer of information. It prevents hackers from getting your information.</li>
+        </ul>
+
+        <h2>5. Browser finally sends the HTTP request to the Server</h2>
+        <ul>
+          <li>In the headers, the request will include the <strong>User-Agent, Authorization, Accept, Content-Type, Origin</strong>. (For more information see <a href="http://apionrails.icalialabs.com/book/chapter_two">HERE</a>). </li>
+          <li>Cookies (key-value pairs) are also sent to track the state of the web site in-between page requests. Also stores user log-in info, user settings, and more.</li>
+          <li><strong>GET</strong> request parameters are typically sent through the URL</li>
+          <li><strong>POST</strong> request parameters are sent in the request body, just under the headers</li>
+        </ul>
+
+        <h2>6. Server responds with a permanent redirect to "www.google.com"</h2>
+        <ul>
+          <li>Search engines understand permanent redirects (301) response, but they're not smart enough to tell the difference "www.google.com" and "google.com"</li>
+          <li>The Browser then repeats the above steps to ping "www.google.com"</li>
+        </ul>
+
+        <h2>7. Server 'handles' the request</h2>
+        <ul>
+          <li><strong>Web Server Software</strong> (ex. Thin and Apache) recieves the HTTP request and decides which request handler/app (Ruby, PHP, Python, etc.) should handle the request</li>
+          <li><strong>Request Handler</strong> reads the request, parameters, and cookies. The app generates an HTML response. Request handlers often store resources in a file hierarchy similar to URL structure</li>
+        </ul>
+
+        <h2>8. Browser begins to render the HTML</h2>
+
+        <h2>9. Browser sends request for objects embedded in HTML</h2>
+        <ul>
+          <li>Browser fetch images, CSS, and JS files through the same steps listed above.</li>
+          <li><em>Flash of Unstyled Content </em>(FOUC) may happen</li>
+        </ul>
+
+        <h2>10. Browser sends futher AJAX requests</h2>
+        <ul>
+          <li>...based on user input</li>
+        </ul>
+      </div>
+
+      <footer class="article-footer">
+        <a class="article-back" href="/writing/">← Back to writing</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span>&copy; Corey Ghilarducci</span>
+      <span>
+        <a href="mailto:cghilarducci@gmail.com">Email</a>
+        ·
+        <a href="/">Home</a>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

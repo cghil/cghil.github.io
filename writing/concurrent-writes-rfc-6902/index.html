@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concurrent writes with RFC 6902 JSON Patch · Corey Ghilarducci</title>
+  <meta name="description" content="How test plus replace turns a JSON Patch into compare-and-swap when two clients update the same map field.">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/stylesheets/site.css">
+  <link rel="stylesheet" href="/public/stylesheets/writing.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-mark" href="/">Corey Ghilarducci</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/writing/" aria-current="page">Writing</a>
+      <a href="/about/">About</a>
+      <a href="/resume/">Resume</a>
+      <a href="https://github.com/cghil">GitHub</a>
+      <a href="https://www.linkedin.com/in/coreyghilarducci/">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <article class="article">
+      <header class="article-header">
+        <a class="article-back" href="/writing/">← Writing</a>
+        <h1 class="article-title">Concurrent writes with RFC 6902 JSON Patch</h1>
+        <p class="article-meta">
+          <time datetime="2026-10-04">October 4, 2026</time>
+        </p>
+      </header>
+
+      <div class="article-body">
+        <p>We stored user configuration in a managed document store — flexible JSON objects, schema that could grow as the product changed. One field was a map: opaque string keys to small records. Saves came in through an API that often needed to add just one key.</p>
+
+        <p>The naive path is read-modify-write: fetch the map, set your key, write the whole field back. Two of those at once can drop a key. Each request starts from a snapshot that is already stale by the time it writes.</p>
+
+        <h2>Two concurrent saves</h2>
+        <p>The client already has a <code>skillMap</code>. It fires two requests at once, each appending a different key. Those calls hit our microservice — skipping GraphQL, load balancers, and other layers in between for this explanation. The microservice talks to a document service that manages Bigtable for us.</p>
+
+        <pre class="mermaid">
+sequenceDiagram
+  participant Client
+  participant Microservice
+  participant Doc as DocumentService
+  Note over Client: Already has skillMap snapshot
+  par Append key A and key B
+    Client->>Microservice: POST saved-skill A
+    and
+    Client->>Microservice: POST saved-skill B
+  end
+  Microservice->>Doc: read skillMap
+  Doc-->>Microservice: snapshot S
+  Microservice->>Doc: PATCH test(S) replace(S+A)
+  Doc-->>Microservice: 200
+  Microservice-->>Client: 200 success for A
+  Microservice->>Doc: PATCH test(S) replace(S+B)
+  Doc-->>Microservice: 409
+  Microservice-->>Client: conflict / retry path for B
+        </pre>
+
+        <p>Without <code>test</code>, both requests can read the same snapshot, each build a map with only their own new key, and both patch <code>/skillMap</code>. The later write wins; the other key is gone. Neither call knows the map changed under it.</p>
+
+        <p>With <code>test</code>, the first request’s <code>test</code> plus <code>replace</code> succeeds and the client gets success. The second request’s <code>test</code> still asserts the old map; the document service rejects the patch with <code>409</code>. Nothing is written for that attempt.</p>
+
+        <h2>Don’t PUT the object</h2>
+        <p>A full object replace is worse. The document also held sibling fields — things like <code>defaultFolderId</code> and <code>schemaVersion</code>. Putting the whole object from a partial client view can wipe those defaults. The store exposed JSON Patch for a reason:</p>
+        <pre><code>PATCH /objects/{id}
+Content-Type: application/json-patch+json</code></pre>
+        <p>Patch only the field you mean to change. Leave everything else alone.</p>
+
+        <h2>Compare-and-swap with <code>test</code> + <code>replace</code></h2>
+        <p><a href="https://datatracker.ietf.org/doc/html/rfc6902">RFC 6902</a> defines a <code>test</code> operation: if the current value at a path does not match, the whole patch is rejected and nothing changes. Pair that with <code>replace</code> and you get compare-and-swap without a separate version field. The client does not send a version number; the value <em>is</em> the version.</p>
+
+        <p>On <code>POST /v1/saved-skills</code>, after validating the new entry, and assuming the config object already exists for the user:</p>
+        <ol>
+          <li>Read <code>user_config_{userId}</code> and keep <code>skillMap</code> exactly as stored.</li>
+          <li>Build a new map by setting that one key — entry file id and <code>createdAt</code> — and leave every other key as it was.</li>
+          <li>Patch only <code>skillMap</code>, guarded by the value just read.</li>
+        </ol>
+
+        <pre><code>[
+  {
+    "op": "test",
+    "path": "/skillMap",
+    "value": {
+      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" }
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/skillMap",
+    "value": {
+      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" },
+      "222": { "fileId": "9002", "createdAt": "2026-09-22T15:00:00Z" }
+    }
+  }
+]</code></pre>
+
+        <p>The <code>test</code> value must be the map returned by the read. The <code>replace</code> value is that map with this request’s one key applied. If <code>skillMap</code> is missing, use <code>add</code> for <code>/skillMap</code> and skip <code>test</code>.</p>
+
+        <h2>Retry on conflict</h2>
+        <p>If <code>test</code> fails, the document service returns <code>409</code> — another write landed first. Re-read and run the same decision again: build the new map from the fresh snapshot, then <code>test</code> plus <code>replace</code>. Do not write the stale map. A few attempts is enough. If they are exhausted, return a retryable <code>503</code>. The caller’s retry is safe when a save that already landed is treated as an already-saved conflict.</p>
+
+        <h2>What does not collide</h2>
+        <p>A create race stays separate: a <code>409</code> on create means the instance already exists, then fall into this patch path. An update that patches only <code>defaultFolderId</code> does not collide with this write — different paths, different fields.</p>
+
+        <p>The lesson I keep: when the store speaks RFC 6902, use <code>test</code> as your lock. Read-modify-write of a whole map is how concurrent saves quietly lose each other’s work.</p>
+      </div>
+
+      <footer class="article-footer">
+        <a class="article-back" href="/writing/">← Back to writing</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span>&copy; Corey Ghilarducci</span>
+      <span>
+        <a href="mailto:cghilarducci@gmail.com">Email</a>
+        ·
+        <a href="/">Home</a>
+      </span>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+  </script>
+</body>
+</html>
