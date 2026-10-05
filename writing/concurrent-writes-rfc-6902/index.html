@@ -44,23 +44,43 @@
 
         <pre class="mermaid">
 sequenceDiagram
-  participant Client
-  participant Microservice
-  participant Doc as DocumentService
-  Note over Client: Already has skillMap snapshot
-  par Append key A and key B
-    Client->>Microservice: POST saved-skill A
-    and
-    Client->>Microservice: POST saved-skill B
-  end
-  Microservice->>Doc: read skillMap
-  Doc-->>Microservice: snapshot S
-  Microservice->>Doc: PATCH test(S) replace(S+A)
-  Doc-->>Microservice: 200
-  Microservice-->>Client: 200 success for A
-  Microservice->>Doc: PATCH test(S) replace(S+B)
-  Doc-->>Microservice: 409
-  Microservice-->>Client: conflict / retry path for B
+    autonumber
+
+    participant Client
+    participant A as Request A
+    participant B as Request B
+    participant Doc as DocumentService
+
+    Note over Client,Doc: Existing skillMap = S
+
+    par Save skill A
+        Client->>A: POST /saved-skills (A)
+        A->>Doc: Read skillMap
+        Doc-->>A: Snapshot S
+    and Save skill B
+        Client->>B: POST /saved-skills (B)
+        B->>Doc: Read skillMap
+        Doc-->>B: Snapshot S
+    end
+
+    Note over Client,Doc: Both requests based on snapshot S
+
+    A->>Doc: PATCH test(S) replace(S+A)
+    Doc-->>A: 200 OK
+    A-->>Client: 200 OK
+
+    B->>Doc: PATCH test(S) replace(S+B)
+    Doc-->>B: 409 Conflict
+
+    alt Retry on conflict
+        B->>Doc: Read skillMap
+        Doc-->>B: Snapshot S+A
+        B->>Doc: PATCH test(S+A) replace(S+A+B)
+        Doc-->>B: 200 OK
+        B-->>Client: 200 OK
+    else No retry
+        B-->>Client: 409 Conflict
+    end
         </pre>
 
         <p>Without <code>test</code>, both requests can read the same snapshot, each build a map with only their own new key, and both patch <code>/skillMap</code>. The later write wins; the other key is gone. Neither call knows the map changed under it.</p>
@@ -130,7 +150,17 @@ Content-Type: application/json-patch+json</code></pre>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "neutral",
+      sequence: {
+        actorMargin: 40,
+        width: 130,
+        boxMargin: 8,
+        messageMargin: 30,
+        noteMargin: 10
+      }
+    });
   </script>
 </body>
 </html>
