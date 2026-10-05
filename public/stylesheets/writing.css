@@ -1,0 +1,147 @@
+.writing-index {
+  max-width: 40rem;
+}
+
+.writing-index .post-list {
+  gap: 1.75rem;
+}
+
+.article {
+  max-width: 40rem;
+}
+
+.article-header {
+  margin-bottom: 2rem;
+}
+
+.article-back {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  color: var(--slate);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.article-back:hover {
+  color: var(--pacific-deep);
+}
+
+.article-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 2.85rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.article-meta {
+  margin: 0.85rem 0 0;
+  color: var(--slate);
+  font-size: 0.95rem;
+}
+
+.article-body {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+
+.article-body > * + * {
+  margin-top: 1.15rem;
+}
+
+.article-body h2 {
+  margin-top: 2.4rem;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-sans);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.article-body h3 {
+  margin-top: 1.8rem;
+  margin-bottom: 0.55rem;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.article-body p,
+.article-body li {
+  max-width: 40rem;
+}
+
+.article-body ul,
+.article-body ol {
+  padding-left: 1.25rem;
+}
+
+.article-body li + li {
+  margin-top: 0.4rem;
+}
+
+.article-body a {
+  color: var(--pacific-deep);
+}
+
+.article-body strong {
+  font-weight: 600;
+}
+
+.article-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  background: rgba(21, 32, 40, 0.06);
+}
+
+.article-body pre {
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #edf2f5;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.article-body .mermaid {
+  width: min(100vw - 2rem, 56rem);
+  max-width: none;
+  margin: 1.5rem 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  overflow-x: auto;
+  font-family: var(--font-sans);
+  text-align: center;
+}
+
+.article-body pre.mermaid {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0;
+}
+
+.article-body pre code {
+  padding: 0;
+  background: transparent;
+  font-size: inherit;
+}
+
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--pacific);
+  color: var(--slate);
+}
+
+.article-footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}

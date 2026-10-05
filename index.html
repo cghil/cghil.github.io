@@ -1,214 +1,109 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Corey Ghilarducci</title>
-    <meta name="description" content="About Corey Ghilarducci">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="public/stylesheets/normalize.css">
-    <link rel="stylesheet" type="text/css" href="public/stylesheets/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="public/stylesheets/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="public/stylesheets/style.css">
-    <link rel="shortcut icon" href="/public/images/favicon.ico">
-    <script>
-    (function() {
-        var t, i, e, n = window,
-            o = document,
-            a = arguments,
-            s = "script",
-            r = ["config", "track", "identify", "visit", "push", "call", "trackForm", "trackClick"],
-            c = function() {
-                var t, i = this;
-                for (i._e = [], t = 0; r.length > t; t++)(function(t) {
-                    i[t] = function() {
-                        return i._e.push([t].concat(Array.prototype.slice.call(arguments, 0))), i
-                    }
-                })(r[t])
-            };
-        for (n._w = n._w || {}, t = 0; a.length > t; t++) n._w[a[t]] = n[a[t]] = n[a[t]] || new c;
-        i = o.createElement(s), i.async = 1, i.src = "//static.woopra.com/js/w.js", e = o.getElementsByTagName(s)[0], e.parentNode.insertBefore(i, e)
-    })("woopra");
-
-    woopra.config({
-        domain: 'coreyghilarducci.com'
-    });
-    woopra.track();
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Corey Ghilarducci</title>
+  <meta name="description" content="Senior Software Engineer at Box. Technical writing on APIs, integrations, and shipping product.">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/stylesheets/site.css">
 </head>
-
 <body>
-    <div id="splash">
-        <div class="container">
-            <div class="row">
-                <div class="profile-photo col-md-3 col-xs-12">
-                    <div class="text-center">
-                        <img class="round-corners profile-picture" src="./public/images/profile.jpg">
-                    </div>
-                </div>
-                <div class="profile col-md-5 col-xs-12">
-                    <h1 class="text-center">Corey Ghilarducci</h1>
-                    <h2 class="text-center">Support Engineer</h2>
-                    <h3 class="text-center">San Mateo, CA</h3>
-                    <div class="logos text-center">
-                        <h5 class="text-center email">
-                            <a href="mailto:cghilarducci@gmail.com">
-                                <span class="black-link">cghilarducci@gmail.com</span>
-                            </a>
-                        </h5>
-                        <a class='logo' href="https://github.com/cghil">
-                            <i class="padding fa fa-github fa-3x"></i>
-                        </a>
-                        <a class='logo' href="https://www.linkedin.com/in/coreyghilarducci">
-                            <i class="padding fa fa-linkedin fa-3x"></i>
-                        </a>
-                        <a class="logo" href="/resume">
-                            <i class="padding fa fa-file-text-o fa-3x"></i>
-                        </a>
-                        <a class="logo" href="https://instagram.com/cghil/">
-                            <i class="padding fa fa-instagram fa-3x"></i>
-                        </a>
-                        <a class="logo" href="mailto:cghilarducci@gmail.com">
-                            <i class="padding fa fa-envelope-o fa-3x"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="welcome col-md-4 col-xs-12">
-                    <p class="text-center">I am a ruby enthusiast, JavaScript advocate, energetic learner, economics geek, YouTube addict, basketball junkie, and data believer. </p>
-                    <br>
-                    <p class="text-center">Please reach out if you'd like to collaborate on a project or grab a cup of coffee.</p>
-                    <p class="text-center"> <a href="./blog/mystory">Learn more about me...</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="visual">
-        <div class="container">
-            <div id="viz">
-            </div>
-        </div>
-    </div>
-    <div id="projects">
-        <div id="code-projects">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="gallery-details">
-                            <h2 class="text-center">Projects</h2>
-                            <p class="text-center"> Click on a project to view its details</p>
-                        </div>
-                    </div>
-                    <div class="gallery text-center">
-                        <div class="col-xs-12 col-md-4 col-md-offset-1">
-                            <div class="project">
-                                <a href="https://docs.box.com/blog/box-tokener-a-nodejs-command-line-tool-to-generate-box-api-tokens">
-                                    <img class="resize" src="./public/images/tokener.png">
-                                    <div class="info">
-                                        <h4>Tool</h4>
-                                        <p>An Access Token Tool for Box (2017)</p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="project margin-top-5vh">
-                                <a href="/blog/sudoku">
-                                    <img class="resize" src="./public/images/sudoku.png">
-                                    <div class="info">
-                                        <h4>Simple Game</h4>
-                                        <p>Sudoku (2016)</p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="project margin-top-5vh margin-bottom-5vh">
-                                <a href="blog/startupinvestments">
-                                    <img class="resize" src="./public/images/investments.png">
-                                    <div class="info">
-                                        <h4>Graphic</h4>
-                                        <p>Startup Investments (2015)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="project">
-                                <a href="/blog/life-in-weeks">
-                                    <img class="resize" src="./public/images/life-in-weeks.png">
-                                    <div class="info">
-                                        <h4>Graphic</h4>
-                                        <p>Your Life In Weeks (2016)</p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="project margin-top-5vh margin-bottom-5vh">
-                                <a href="blog/south-park-game">
-                                    <img class="resize" src="./public/images/southpark.png">
-                                    <div class="info">
-                                        <h4>Simple Game</h4>
-                                        <p>Who Killed Kenny? (2015)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="words">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="gallery-details">
-                            <h2 class="text-center white">Words</h2>
-                            <p class="text-center white">My Thoughts & Knowledge</p>
-                        </div>
-                    </div>
-                    <div class="gallery text-center">
-                        <div class="col-xs-12 col-md-offset-1 col-md-4 margin-bottom-5vh">
-                            <div class="project">
-                                <a href="blog/what-happens-when-you-type-google-com/">
-                                    <img class="resize" src="./public/images/books.jpg">
-                                    <div class="info">
-                                        <h4>Google.com</h4>
-                                        <p>That interview question (2015)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4 margin-bottom-5vh">
-                            <div class="project">
-                                <a href="blog/sessions-and-cookies">
-                                    <img class="resize" src="./public/images/books.jpg">
-                                    <div class="info">
-                                        <h4>Cookies and Sessions</h4>
-                                        <p>What's the difference? (2015)</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <footer>
-            <div class="container">
-                <div class="foot row">
-                    <div class="col-xs-8 col-xs-offset-2">
-                        <h3 class="title text-center">Contact me @</h3>
-                        <div class="logos text-center">
-                            <a class='logo' href="https://github.com/cghil"><i class="padding fa fa-github fa-3x"></i></a>
-                            <a class='logo' href="https://www.linkedin.com/in/coreyghilarducci"><i class="padding fa fa-linkedin fa-3x"></i></a>
-                            <a class="logo" href="mailto:cghilarducci@gmail.com"><i class="padding fa fa-envelope-o fa-3x"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-8 col-xs-offset-2">
-                        <h5 class="text-center email margin-15"><a href="mailto:cghilarducci@gmail.com"><span class="black-link">cghilarducci@gmail.com</span></a></h5>
-                        <h3 class="text-center copy">&copy Corey Ghilarducci 2015</h3>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <script type="text/javascript" src="public/javascript/jquery.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="public/javascript/index.js"></script>
-        <script type="text/javascript" src="public/javascript/analytics-homepage.js"></script>
-</body>
+  <header class="site-header">
+    <a class="site-mark" href="/">Corey Ghilarducci</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/writing/">Writing</a>
+      <a href="/about/">About</a>
+      <a href="/resume/">Resume</a>
+      <a href="https://github.com/cghil">GitHub</a>
+      <a href="https://www.linkedin.com/in/coreyghilarducci/">LinkedIn</a>
+    </nav>
+  </header>
 
+  <main class="site-main">
+    <section class="hero" aria-labelledby="hero-name">
+      <h1 class="hero-name" id="hero-name">Corey Ghilarducci</h1>
+      <p class="hero-role">Senior Software Engineer</p>
+      <p class="hero-lede">I ship developer-facing systems and AI product at Box — with a decade of diagnosing integrations, clarifying ambiguous requirements, and writing things down so teams can move.</p>
+      <div class="hero-actions">
+        <a class="button" href="/writing/">Writing</a>
+        <a class="button button-secondary" href="mailto:cghilarducci@gmail.com">Email</a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="work-title">
+      <h2 class="section-title" id="work-title">Selected work</h2>
+      <ul class="work-list">
+        <li class="work-item">
+          <span class="work-meta">Box AI · 2025</span>
+          <h3>Prompt Library service</h3>
+          <p>Designed and built the Spring/Java service behind Box AI’s Prompt Library — GraphQL CRUD from first commit to production in eight weeks, through general availability.</p>
+        </li>
+        <li class="work-item">
+          <span class="work-meta">Box Workflow · 2020–2025</span>
+          <h3>Forms data model &amp; validation</h3>
+          <p>Defined the Box Forms data model and Joi validation schema so frontend and middleware enforced the same rules through the product’s general availability.</p>
+        </li>
+        <li class="work-item">
+          <span class="work-meta">Developer tooling · 2017</span>
+          <h3>box-tokener</h3>
+          <p>Turned recurring JWT and app-user confusion into a published Node.js CLI and developer tutorial for generating Box API tokens.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="writing-title">
+      <h2 class="section-title" id="writing-title">Writing</h2>
+      <ul class="post-list">
+        <li>
+          <a href="/writing/concurrent-writes-rfc-6902/">
+            <h3 class="post-title">Concurrent writes with RFC 6902 JSON Patch</h3>
+            <time class="post-date" datetime="2026-10-04">October 4, 2026</time>
+            <p class="post-summary">How test plus replace turns a JSON Patch into compare-and-swap when two clients update the same map field.</p>
+          </a>
+        </li>
+        <li>
+          <a href="/writing/what-happens-when-you-type-google-com/">
+            <h3 class="post-title">What Happens When You Type "Google.com?"</h3>
+            <time class="post-date" datetime="2015-07-29">July 29, 2015</time>
+            <p class="post-summary">A colloquial walkthrough of what happens when you type google.com — from DNS lookup through TCP, TLS, HTTP, and rendering.</p>
+          </a>
+        </li>
+        <li>
+          <a href="/writing/sessions-and-cookies/">
+            <h3 class="post-title">Preventing Attacks on Cookies and Sessions</h3>
+            <time class="post-date" datetime="2015-07-28">July 28, 2015</time>
+            <p class="post-summary">Session vs cookie differences, common cookie attack vectors, and a high-level remember-token implementation.</p>
+          </a>
+        </li>
+      </ul>
+      <a class="section-more" href="/writing/">All writing</a>
+    </section>
+
+    <section class="section contact-block" aria-labelledby="contact-title">
+      <h2 class="section-title" id="contact-title">Contact</h2>
+      <p>Based in Pacifica, CA. Open to conversations about partner engineering, integrations, and shipping clear technical product.</p>
+      <div class="contact-links">
+        <a href="mailto:cghilarducci@gmail.com">cghilarducci@gmail.com</a>
+        <a href="https://www.linkedin.com/in/coreyghilarducci/">LinkedIn</a>
+        <a href="https://github.com/cghil">GitHub</a>
+        <a href="/resume/">Resume</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span>&copy; Corey Ghilarducci</span>
+      <span>
+        <a href="mailto:cghilarducci@gmail.com">Email</a>
+        ·
+        <a href="/writing/">Writing</a>
+      </span>
+    </div>
+  </footer>
+</body>
 </html>
