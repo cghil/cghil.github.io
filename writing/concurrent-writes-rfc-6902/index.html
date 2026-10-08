@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Concurrent writes with RFC 6902 JSON Patch · Corey Ghilarducci</title>
-  <meta name="description" content="How test plus replace turns a JSON Patch into compare-and-swap when two clients update the same map field.">
+  <meta name="description" content="Two saves both returned 200. One skill was gone.">
   <link rel="icon" href="/public/images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,50 +35,13 @@
       </header>
 
       <div class="article-body">
-        <p>We stored user configuration in a managed document store — flexible JSON objects, schema that could grow as the product changed. One field was a map: opaque string keys to small records. Saves came in through an API that often needed to add just one key.</p>
+        <h2>A skill vanished</h2>
+        <p>User config lived in a JSON document. One field, <code>skillMap</code>, held saved skills. The map started as skill <code>111</code>.</p>
 
-        <p>The naive path is read-modify-write: fetch the map, set your key, write the whole field back. Two of those at once can drop a key. Each request starts from a snapshot that is already stale by the time it writes.</p>
+        <p>Two saves ran at once: skill <code>222</code> and skill <code>333</code>. Both returned success. After a refresh, <code>222</code> was gone and <code>333</code> was there. The client logged no error. The stored map had gone from skill <code>111</code> alone to <code>111</code> and <code>333</code>.</p>
 
-        <h2>Don’t PUT the object</h2>
-        <p>A full object replace is worse. The document also held sibling fields — things like <code>defaultFolderId</code> and <code>schemaVersion</code>. Putting the whole object from a partial client view can wipe those defaults. The store exposed JSON Patch for a reason:</p>
-        <pre><code>PATCH /objects/{id}
-Content-Type: application/json-patch+json</code></pre>
-        <p>Patch only the field you mean to change. Leave everything else alone.</p>
-
-        <h2>Compare-and-swap with <code>test</code> + <code>replace</code></h2>
-        <p><a href="https://datatracker.ietf.org/doc/html/rfc6902">RFC 6902</a> defines a <code>test</code> operation: if the current value at a path does not match, the whole patch is rejected and nothing changes. Pair that with <code>replace</code> and you get compare-and-swap without a separate version field. The client does not send a version number; the value <em>is</em> the version.</p>
-
-        <p>On <code>POST /v1/saved-skills</code>, after validating the new entry, and assuming the config object already exists for the user:</p>
-        <ol>
-          <li>Read <code>user_config_{userId}</code> and keep <code>skillMap</code> exactly as stored.</li>
-          <li>Build a new map by setting that one key — entry file id and <code>createdAt</code> — and leave every other key as it was.</li>
-          <li>Patch only <code>skillMap</code>, guarded by the value just read.</li>
-        </ol>
-
-        <pre><code>[
-  {
-    "op": "test",
-    "path": "/skillMap",
-    "value": {
-      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" }
-    }
-  },
-  {
-    "op": "replace",
-    "path": "/skillMap",
-    "value": {
-      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" },
-      "222": { "fileId": "9002", "createdAt": "2026-09-22T15:00:00Z" }
-    }
-  }
-]</code></pre>
-
-        <p>The <code>test</code> value must be the map returned by the read. The <code>replace</code> value is that map with this request’s one key applied. If <code>skillMap</code> is missing, use <code>add</code> for <code>/skillMap</code> and skip <code>test</code>.</p>
-
-        <h2>Two concurrent saves</h2>
-        <p>The client already has a <code>skillMap</code>. It fires two requests at once, each appending a different key. Those calls hit our microservice — skipping GraphQL, load balancers, and other layers in between for this explanation. The microservice talks to a document service that manages Bigtable for us.</p>
-
-        <p>Without <code>test</code>, both requests can read the same snapshot, each build a map with only their own new key, and both patch <code>/skillMap</code>. The later write wins; the other key is gone. Neither call knows the map changed under it.</p>
+        <h2>Both requests read the same map</h2>
+        <p>Each save reads <code>skillMap</code>, adds its own key, and replaces the whole field. Both requests read the same snapshot, <code>S</code>. Request A writes <code>S</code> plus skill <code>222</code>. Request B writes <code>S</code> plus skill <code>333</code>. The document service accepts both patches. The later replace wins, and the other key is gone. Neither call knows the map changed under it.</p>
 
         <figure class="patch-race" data-patch-race data-mode="without" aria-label="Lost update without test">
           <div class="patch-race-head">
@@ -136,7 +99,44 @@ Content-Type: application/json-patch+json</code></pre>
           </div>
         </figure>
 
-        <p>With <code>test</code>, the first request’s <code>test</code> plus <code>replace</code> succeeds and the client gets success. The second request’s <code>test</code> still asserts the old map; the document service rejects the patch with <code>409</code>. Nothing is written for that attempt.</p>
+        <p>Replacing the whole document is a worse version of the same mistake. The object also held sibling fields — <code>defaultFolderId</code> and <code>schemaVersion</code>. Putting it back from a partial client view can wipe those. The store exposed JSON Patch so a write can touch only the field it means to change:</p>
+        <pre><code>PATCH /objects/{id}
+Content-Type: application/json-patch+json</code></pre>
+        <p>A patch that replaces the whole map is still a lost update.</p>
+
+        <h2>Make the map the version</h2>
+        <p><a href="https://datatracker.ietf.org/doc/html/rfc6902">RFC 6902</a> defines a <code>test</code> operation: if the current value at a path does not match, the whole patch is rejected and nothing changes. Pair <code>test</code> with <code>replace</code> and the stored map is the version. There is no separate version field. The client does not send a version number; the value <em>is</em> the version.</p>
+
+        <p>On <code>POST /v1/saved-skills</code>, after validating the new entry, and assuming the config object already exists for the user:</p>
+        <ol>
+          <li>Read <code>user_config_{userId}</code> and keep <code>skillMap</code> exactly as stored.</li>
+          <li>Build a new map by setting that one key — entry file id and <code>createdAt</code> — and leave every other key as it was.</li>
+          <li>Patch only <code>skillMap</code>, guarded by the value just read.</li>
+        </ol>
+        <p>The <code>test</code> value must be the map returned by the read. The <code>replace</code> value is that map with this request’s one key applied. If <code>skillMap</code> is missing, use <code>add</code> for <code>/skillMap</code> and skip <code>test</code>.</p>
+
+        <p>If <code>test</code> fails, the document service returns <code>409</code> — another write landed first. Re-read and run the same decision again: build the new map from the fresh snapshot, then <code>test</code> plus <code>replace</code>. Do not write the stale map. A few attempts is enough. If they are exhausted, return a retryable <code>503</code>. The caller’s retry is safe when a save that already landed is treated as an already-saved conflict.</p>
+
+        <h2>The second write has to notice</h2>
+        <p>Saving skill <code>222</code> on top of skill <code>111</code> sends this patch. <code>test</code> asserts the map just read. <code>replace</code> is that map with one key added.</p>
+        <pre><code>[
+  {
+    "op": "test",
+    "path": "/skillMap",
+    "value": {
+      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" }
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/skillMap",
+    "value": {
+      "111": { "fileId": "9001", "createdAt": "2026-09-01T12:00:00Z" },
+      "222": { "fileId": "9002", "createdAt": "2026-09-22T15:00:00Z" }
+    }
+  }
+]</code></pre>
+        <p>Request A’s <code>test</code> matches, so its replace lands. Request B still asserts the old map. That patch has to fail.</p>
 
         <figure class="patch-race" data-patch-race data-mode="with" aria-label="Protected write with test and replace">
           <div class="patch-race-head">
@@ -194,13 +194,11 @@ Content-Type: application/json-patch+json</code></pre>
           </div>
         </figure>
 
-        <h2>Retry on conflict</h2>
-        <p>If <code>test</code> fails, the document service returns <code>409</code> — another write landed first. Re-read and run the same decision again: build the new map from the fresh snapshot, then <code>test</code> plus <code>replace</code>. Do not write the stale map. A few attempts is enough. If they are exhausted, return a retryable <code>503</code>. The caller’s retry is safe when a save that already landed is treated as an already-saved conflict.</p>
+        <p>Request A returns <code>200</code>. Request B’s <code>test</code> of snapshot <code>S</code> returns <code>409</code>, and nothing is written for that attempt. B re-reads the map, adds skill <code>333</code>, and retries. Both keys remain.</p>
 
-        <h2>What does not collide</h2>
         <p>A create race stays separate: a <code>409</code> on create means the instance already exists, then fall into this patch path. An update that patches only <code>defaultFolderId</code> does not collide with this write — different paths, different fields.</p>
 
-        <p>The lesson I keep: when the store speaks RFC 6902, use <code>test</code> as your lock. Read-modify-write of a whole map is how concurrent saves quietly lose each other’s work.</p>
+        <p>The lesson I keep: when the store speaks RFC 6902, use <code>test</code> as the lock. Read-modify-write of a whole map is how concurrent saves drop each other’s keys.</p>
       </div>
 
       <footer class="article-footer">
