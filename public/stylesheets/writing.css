@@ -110,21 +110,252 @@
   line-height: 1.55;
 }
 
-.article-body .mermaid {
+.article-body .patch-race {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
   width: min(100vw - 2rem, 56rem);
   max-width: none;
-  margin: 1.5rem 0;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  overflow-x: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 0.35rem;
+  margin-left: 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--mist);
+  color: var(--ink);
   font-family: var(--font-sans);
-  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.45;
 }
 
-.article-body pre.mermaid {
+.article-body .patch-race p {
+  max-width: none;
+  margin: 0;
+}
+
+.article-body .patch-race pre {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  overflow-x: auto;
   border: none;
-  background: transparent;
-  padding: 0.5rem 0;
+  border-radius: 3px;
+  background: #edf2f5;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+/* Hold each code block at its tallest step so new keys do not shift the figure. */
+.article-body .patch-race[data-mode="without"] pre {
+  min-height: calc(4lh + 1.3rem);
+}
+
+.article-body .patch-race[data-mode="with"] pre {
+  min-height: calc(5lh + 1.3rem);
+}
+
+.patch-race-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.patch-race-title {
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.article-body .patch-race .patch-race-step {
+  margin-top: 0.15rem;
+  color: var(--slate);
+  font-size: 0.9rem;
+}
+
+.patch-race-badge {
+  flex: none;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(92, 107, 118, 0.12);
+  color: var(--slate);
+  font-size: 0.8rem;
+}
+
+.patch-race-badge[data-tone="lost"],
+.patch-race-badge[data-tone="conflict"] {
+  background: rgba(140, 69, 69, 0.12);
+  color: #8c4545;
+}
+
+.patch-race-badge[data-tone="saved"] {
+  background: rgba(31, 111, 139, 0.12);
+  color: var(--pacific-deep);
+}
+
+.patch-race-progress {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.patch-race-progress > span {
+  display: block;
+  height: 100%;
+  width: 25%;
+  background: var(--pacific);
+}
+
+.patch-race[data-bar="lost"] .patch-race-progress > span,
+.patch-race[data-bar="conflict"] .patch-race-progress > span {
+  background: #8c4545;
+}
+
+.patch-race-requests {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.patch-race-card {
+  padding: 0.85rem 0.9rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--salt);
+}
+
+.patch-race-card-title {
+  font-weight: 500;
+}
+
+.article-body .patch-race .patch-race-card-sub,
+.article-body .patch-race .patch-race-snap {
+  color: var(--slate);
+  font-size: 0.85rem;
+}
+
+.article-body .patch-race .patch-race-snap {
+  margin-top: 0.65rem;
+  margin-bottom: 0.35rem;
+}
+
+.article-body .patch-race .patch-race-doc .patch-race-card-sub {
+  margin-bottom: 0.45rem;
+}
+
+.patch-race-doc[data-tone="lost"],
+.patch-race-doc[data-tone="conflict"] {
+  border-color: #c9a3a3;
+}
+
+.patch-race-doc[data-tone="saved"] {
+  border-color: var(--pacific);
+}
+
+.article-body .patch-race .patch-race-status {
+  display: inline-block;
+  margin-top: 0.55rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(92, 107, 118, 0.12);
+  color: var(--slate);
+  font-size: 0.8rem;
+}
+
+.article-body .patch-race .patch-race-status[data-tone="ok"] {
+  background: rgba(31, 111, 139, 0.12);
+  color: var(--pacific-deep);
+}
+
+.article-body .patch-race .patch-race-status[data-tone="conflict"] {
+  background: #8c3030;
+  color: #fff;
+  font-weight: 500;
+}
+
+.patch-race-card:has(.patch-race-status[data-tone="conflict"]) {
+  border-color: #8c3030;
+  background: #fbf4f4;
+}
+
+.patch-race-op {
+  color: var(--slate);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.patch-race-caption {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.article-body .patch-race .patch-race-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.patch-race-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.patch-race-controls button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--salt);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.patch-race-controls button:focus-visible {
+  outline: 2px solid var(--pacific);
+  outline-offset: 2px;
+}
+
+.patch-race-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.patch-race-controls [data-next] {
+  margin-left: auto;
+  border-color: var(--pacific);
+  background: var(--pacific);
+  color: var(--salt);
+}
+
+.patch-race-controls [data-next]:hover:not(:disabled) {
+  border-color: var(--pacific-deep);
+  background: var(--pacific-deep);
+}
+
+@media (max-width: 640px) {
+  .patch-race-requests {
+    grid-template-columns: 1fr;
+  }
+
+  .patch-race-head {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .patch-race-progress > span {
+    transition: width 160ms ease;
+  }
 }
 
 .article-body pre code {

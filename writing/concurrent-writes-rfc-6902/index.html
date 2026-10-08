@@ -78,50 +78,121 @@ Content-Type: application/json-patch+json</code></pre>
         <h2>Two concurrent saves</h2>
         <p>The client already has a <code>skillMap</code>. It fires two requests at once, each appending a different key. Those calls hit our microservice — skipping GraphQL, load balancers, and other layers in between for this explanation. The microservice talks to a document service that manages Bigtable for us.</p>
 
-        <pre class="mermaid">
-sequenceDiagram
-    autonumber
-
-    participant Client
-    participant A as Request A
-    participant B as Request B
-    participant Doc as DocumentService
-
-    Note over Client,Doc: Existing skillMap = S
-
-    par Save skill A
-        Client->>A: POST /v1/saved-skills (A)
-        A->>Doc: Read skillMap
-        Doc-->>A: Snapshot S
-    and Save skill B
-        Client->>B: POST /v1/saved-skills (B)
-        B->>Doc: Read skillMap
-        Doc-->>B: Snapshot S
-    end
-
-    Note over Client,Doc: Both requests based on snapshot S
-
-    A->>Doc: PATCH test(S) replace(S+A)
-    Doc-->>A: 200 OK
-    A-->>Client: 200 OK
-
-    B->>Doc: PATCH test(S) replace(S+B)
-    Doc-->>B: 409 Conflict
-
-    alt Retry on conflict
-        B->>Doc: Read skillMap
-        Doc-->>B: Snapshot S+A
-        B->>Doc: PATCH test(S+A) replace(S+A+B)
-        Doc-->>B: 200 OK
-        B-->>Client: 200 OK
-    else No retry
-        B-->>Client: 409 Conflict
-    end
-        </pre>
-
         <p>Without <code>test</code>, both requests can read the same snapshot, each build a map with only their own new key, and both patch <code>/skillMap</code>. The later write wins; the other key is gone. Neither call knows the map changed under it.</p>
 
+        <figure class="patch-race" data-patch-race data-mode="without" aria-label="Lost update without test">
+          <div class="patch-race-head">
+            <div>
+              <p class="patch-race-title" data-title>Lost update</p>
+              <p class="patch-race-step" data-step>Step 1 of 4 · Initial state</p>
+            </div>
+            <p class="patch-race-badge" data-badge data-tone="progress">In progress</p>
+          </div>
+
+          <div class="patch-race-progress" data-progress role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-label="Step">
+            <span data-progress-bar></span>
+          </div>
+
+          <div class="patch-race-requests">
+            <div class="patch-race-card">
+              <p class="patch-race-card-title">Request A</p>
+              <p class="patch-race-card-sub">Save skill 222</p>
+              <p class="patch-race-snap">Snapshot S + A</p>
+              <pre data-a-map>{
+  "111": "9001",
+  "222": "9002"
+}</pre>
+              <p class="patch-race-status" data-a-status data-tone="wait">Waiting</p>
+            </div>
+            <div class="patch-race-card">
+              <p class="patch-race-card-title">Request B</p>
+              <p class="patch-race-card-sub">Save skill 333</p>
+              <p class="patch-race-snap" data-b-label>Snapshot S + B</p>
+              <pre data-b-map>{
+  "111": "9001",
+  "333": "9003"
+}</pre>
+              <p class="patch-race-status" data-b-status data-tone="wait">Waiting</p>
+            </div>
+          </div>
+
+          <p class="patch-race-op" data-op>PATCH /skillMap · replace only</p>
+
+          <div class="patch-race-card patch-race-doc" data-doc data-tone="progress">
+            <p class="patch-race-card-title">DocumentService</p>
+            <p class="patch-race-card-sub">Stored skillMap</p>
+            <pre data-stored>{
+  "111": "9001"
+}</pre>
+          </div>
+
+          <p class="patch-race-caption" data-caption>The document initially contains skill 111.</p>
+          <p class="patch-race-live" data-live aria-live="polite">Step 1 of 4, Initial state. The document initially contains skill 111.</p>
+
+          <div class="patch-race-controls">
+            <button type="button" data-back disabled>Back</button>
+            <button type="button" data-reset>Reset</button>
+            <button type="button" data-next>Next step</button>
+          </div>
+        </figure>
+
         <p>With <code>test</code>, the first request’s <code>test</code> plus <code>replace</code> succeeds and the client gets success. The second request’s <code>test</code> still asserts the old map; the document service rejects the patch with <code>409</code>. Nothing is written for that attempt.</p>
+
+        <figure class="patch-race" data-patch-race data-mode="with" aria-label="Protected write with test and replace">
+          <div class="patch-race-head">
+            <div>
+              <p class="patch-race-title" data-title>Protected write</p>
+              <p class="patch-race-step" data-step>Step 1 of 5 · Initial state</p>
+            </div>
+            <p class="patch-race-badge" data-badge data-tone="progress">In progress</p>
+          </div>
+
+          <div class="patch-race-progress" data-progress role="progressbar" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" aria-label="Step">
+            <span data-progress-bar></span>
+          </div>
+
+          <div class="patch-race-requests">
+            <div class="patch-race-card">
+              <p class="patch-race-card-title">Request A</p>
+              <p class="patch-race-card-sub">Save skill 222</p>
+              <p class="patch-race-snap">Snapshot S + A</p>
+              <pre data-a-map>{
+  "111": "9001",
+  "222": "9002"
+}</pre>
+              <p class="patch-race-status" data-a-status data-tone="wait">Waiting</p>
+            </div>
+            <div class="patch-race-card">
+              <p class="patch-race-card-title">Request B</p>
+              <p class="patch-race-card-sub">Save skill 333</p>
+              <p class="patch-race-snap" data-b-label>Snapshot S + B</p>
+              <pre data-b-map>{
+  "111": "9001",
+  "333": "9003"
+}</pre>
+              <p class="patch-race-status" data-b-status data-tone="wait">Waiting</p>
+            </div>
+          </div>
+
+          <p class="patch-race-op" data-op>PATCH /skillMap · test + replace</p>
+
+          <div class="patch-race-card patch-race-doc" data-doc data-tone="progress">
+            <p class="patch-race-card-title">DocumentService</p>
+            <p class="patch-race-card-sub">Stored skillMap</p>
+            <pre data-stored>{
+  "111": "9001"
+}</pre>
+          </div>
+
+          <p class="patch-race-caption" data-caption>The document initially contains skill 111.</p>
+          <p class="patch-race-live" data-live aria-live="polite">Step 1 of 5, Initial state. The document initially contains skill 111.</p>
+
+          <div class="patch-race-controls">
+            <button type="button" data-back disabled>Back</button>
+            <button type="button" data-reset>Reset</button>
+            <button type="button" data-next>Next step</button>
+          </div>
+        </figure>
 
         <h2>Retry on conflict</h2>
         <p>If <code>test</code> fails, the document service returns <code>409</code> — another write landed first. Re-read and run the same decision again: build the new map from the fresh snapshot, then <code>test</code> plus <code>replace</code>. Do not write the stale map. A few attempts is enough. If they are exhausted, return a retryable <code>503</code>. The caller’s retry is safe when a save that already landed is treated as an already-saved conflict.</p>
@@ -148,19 +219,219 @@ sequenceDiagram
       </span>
     </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "neutral",
-      sequence: {
-        actorMargin: 40,
-        width: 130,
-        boxMargin: 8,
-        messageMargin: 30,
-        noteMargin: 10
-      }
-    });
+    (function () {
+      var roots = document.querySelectorAll("[data-patch-race]");
+      if (!roots.length) return;
+
+      var S = '{\n  "111": "9001"\n}';
+      var SA = '{\n  "111": "9001",\n  "222": "9002"\n}';
+      var SB = '{\n  "111": "9001",\n  "333": "9003"\n}';
+      var SAB = '{\n  "111": "9001",\n  "222": "9002",\n  "333": "9003"\n}';
+
+      var shared = [
+        {
+          name: "Initial state",
+          badge: "In progress",
+          tone: "progress",
+          aStatus: "Waiting",
+          aTone: "wait",
+          bStatus: "Waiting",
+          bTone: "wait",
+          bLabel: "Snapshot S + B",
+          bMap: SB,
+          stored: S,
+          caption: "The document initially contains skill 111."
+        },
+        {
+          name: "Both requests read S",
+          badge: "In progress",
+          tone: "progress",
+          aStatus: "Waiting",
+          aTone: "wait",
+          bStatus: "Waiting",
+          bTone: "wait",
+          bLabel: "Snapshot S + B",
+          bMap: SB,
+          stored: S,
+          caption: "Both requests read the same snapshot S, before either write completes."
+        },
+        {
+          name: "Request A writes",
+          badge: "In progress",
+          tone: "progress",
+          aStatus: "200 OK",
+          aTone: "ok",
+          bStatus: "Waiting",
+          bTone: "wait",
+          bLabel: "Snapshot S + B",
+          bMap: SB,
+          stored: SA,
+          caption: "Request A writes S+A. Skill 222 is saved successfully."
+        }
+      ];
+
+      var modes = {
+        without: {
+          title: "Lost update",
+          op: "PATCH /skillMap · replace only",
+          steps: shared.concat([
+            {
+              name: "Request B overwrites",
+              badge: "Lost update",
+              tone: "lost",
+              aStatus: "200 OK",
+              aTone: "ok",
+              bStatus: "200 OK",
+              bTone: "ok",
+              bLabel: "Snapshot S + B",
+              bMap: SB,
+              stored: SB,
+              caption: "Request B overwrites the entire skillMap with S+B. Skill 222 has been lost. Both requests returned 200 OK, so the overwrite was not detected."
+            }
+          ])
+        },
+        with: {
+          title: "Protected write",
+          op: "PATCH /skillMap · test + replace",
+          steps: shared.concat([
+            {
+              name: "Request B conflicts",
+              badge: "Conflict detected",
+              tone: "conflict",
+              aStatus: "200 OK",
+              aTone: "ok",
+              bStatus: "409 Conflict",
+              bTone: "conflict",
+              bLabel: "Snapshot S + B",
+              bMap: SB,
+              stored: SA,
+              caption: "B's test(S) fails because the stored map is now S+A. The entire patch is rejected, preserving skill 222."
+            },
+            {
+              name: "Request B retries",
+              badge: "Both saved",
+              tone: "saved",
+              aStatus: "200 OK",
+              aTone: "ok",
+              bStatus: "200 OK",
+              bTone: "ok",
+              bLabel: "Fresh snapshot + B",
+              bMap: SAB,
+              stored: SAB,
+              caption: "B re-reads the updated map, adds skill 333, and retries with a new test. Both skills are preserved."
+            }
+          ])
+        }
+      };
+
+      roots.forEach(function (root) {
+        var mode = root.getAttribute("data-mode");
+        if (!modes[mode]) return;
+
+        var index = 0;
+        var title = root.querySelector("[data-title]");
+        var head = root.querySelector(".patch-race-head");
+        var stepEl = root.querySelector("[data-step]");
+        var badge = root.querySelector("[data-badge]");
+        var progress = root.querySelector("[data-progress]");
+        var progressBar = root.querySelector("[data-progress-bar]");
+        var op = root.querySelector("[data-op]");
+        var bLabel = root.querySelector("[data-b-label]");
+        var bMap = root.querySelector("[data-b-map]");
+        var aStatus = root.querySelector("[data-a-status]");
+        var bStatus = root.querySelector("[data-b-status]");
+        var stored = root.querySelector("[data-stored]");
+        var doc = root.querySelector("[data-doc]");
+        var caption = root.querySelector("[data-caption]");
+        var live = root.querySelector("[data-live]");
+        var back = root.querySelector("[data-back]");
+        var next = root.querySelector("[data-next]");
+
+        function reserveTextHeights() {
+          var spec = modes[mode];
+          var total = spec.steps.length;
+          var captionMax = 0;
+          var headMax = 0;
+
+          caption.style.minHeight = "";
+          head.style.minHeight = "";
+
+          for (var i = 0; i < total; i++) {
+            var step = spec.steps[i];
+            stepEl.textContent = "Step " + (i + 1) + " of " + total + " · " + step.name;
+            badge.textContent = step.badge;
+            caption.textContent = step.caption;
+            captionMax = Math.max(captionMax, caption.offsetHeight);
+            headMax = Math.max(headMax, head.offsetHeight);
+          }
+
+          caption.style.minHeight = captionMax + "px";
+          head.style.minHeight = headMax + "px";
+        }
+
+        function render() {
+          var spec = modes[mode];
+          var step = spec.steps[index];
+          var total = spec.steps.length;
+          var announced = "Step " + (index + 1) + " of " + total + ", " + step.name + ". " + step.caption;
+
+          root.setAttribute("data-bar", step.tone);
+          title.textContent = spec.title;
+          stepEl.textContent = "Step " + (index + 1) + " of " + total + " · " + step.name;
+          badge.textContent = step.badge;
+          badge.setAttribute("data-tone", step.tone);
+          op.textContent = spec.op;
+          bLabel.textContent = step.bLabel;
+          bMap.textContent = step.bMap;
+          aStatus.textContent = step.aStatus;
+          aStatus.setAttribute("data-tone", step.aTone);
+          bStatus.textContent = step.bStatus;
+          bStatus.setAttribute("data-tone", step.bTone);
+          stored.textContent = step.stored;
+          doc.setAttribute("data-tone", step.tone);
+          caption.textContent = step.caption;
+          if (live.textContent !== announced) live.textContent = announced;
+
+          progress.setAttribute("aria-valuemax", String(total));
+          progress.setAttribute("aria-valuenow", String(index + 1));
+          progress.setAttribute("aria-valuetext", announced);
+          progressBar.style.width = ((index + 1) / total * 100) + "%";
+
+          back.disabled = index === 0;
+          next.disabled = index === total - 1;
+        }
+
+        back.addEventListener("click", function () {
+          if (index === 0) return;
+          index -= 1;
+          render();
+        });
+
+        next.addEventListener("click", function () {
+          if (index >= modes[mode].steps.length - 1) return;
+          index += 1;
+          render();
+        });
+
+        root.querySelector("[data-reset]").addEventListener("click", function () {
+          index = 0;
+          render();
+        });
+
+        var resizeTimer;
+        window.addEventListener("resize", function () {
+          window.clearTimeout(resizeTimer);
+          resizeTimer = window.setTimeout(function () {
+            reserveTextHeights();
+            render();
+          }, 100);
+        });
+
+        reserveTextHeights();
+        render();
+      });
+    })();
   </script>
 </body>
 </html>
