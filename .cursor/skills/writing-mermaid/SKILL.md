@@ -30,9 +30,26 @@ description: >-
 </script>
 ```
 
-3. Keep `writing.css` Mermaid rules as-is (breakout width + transparent `pre.mermaid`). Do not restyle diagrams as code blocks.
+3. `writing.css` has no Mermaid rules right now. Add these when a post needs a diagram, and do not restyle diagrams as code blocks:
 
-Reference post: `writing/concurrent-writes-rfc-6902/index.html`.
+```css
+.article-body .mermaid {
+  width: min(100vw - 2rem, 56rem);
+  max-width: none;
+  margin: 1.5rem 0;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  overflow-x: auto;
+  font-family: var(--font-sans);
+  text-align: center;
+}
+
+.article-body pre.mermaid {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0;
+}
+```
 
 ## HTML pitfalls (critical)
 
