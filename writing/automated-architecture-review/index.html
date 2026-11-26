@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Automating Codebase Architecture Reviews · Corey Ghilarducci</title>
+  <title>Automating Architecture Reviews with AI Agents · Corey Ghilarducci</title>
   <meta name="description" content="Eight PRs in a day changes how a codebase ages. Here is how I run a weekly agent to protect software fundamentals as code volume scales.">
   <link rel="icon" href="/public/images/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
     <article class="article">
       <header class="article-header">
         <a class="article-back" href="/writing/">← Writing</a>
-        <h1 class="article-title">Automating Codebase Architecture Reviews</h1>
+        <h1 class="article-title">Automating Architecture Reviews with AI Agents</h1>
         <p class="article-meta">
           <time datetime="2026-11-22">November 22, 2026</time>
         </p>
@@ -75,7 +75,7 @@
         <p>Software fundamentals still work in an agentic coding world. In many ways, they matter more than ever — they stop being just style preferences for humans and become guardrails for AI reliability:</p>
         <ul>
           <li><strong>Agents have limited focus (context windows).</strong> When logic is scattered across a dozen files, an agent has to hunt through the codebase and often misses a spot, causing silent bugs. Keeping related code tightly grouped — high cohesion — lets the agent read a couple of files and get the change right the first time.</li>
-          <li><strong>Typing is cheap, confusion is expensive (rethinking DRY).</strong> AI has reduced the cost of writing boilerplate, but not the cost of maintaining duplicated knowledge. Prefer explicit, locally understandable code over premature abstractions. Centralize business rules and shared invariants, but tolerate structural repetition when it improves readability and reduces coupling. Introduce abstractions when they reduce cognitive load, not simply when they reduce line count.</li>
+          <li><strong>Typing is cheap, confusion is expensive (rethinking DRY).</strong> AI can generate boilerplate in seconds, but poorly chosen abstractions increase the cognitive load for both engineers and agents. Don’t extract code simply because it looks similar. Centralize business rules, encapsulate meaningful complexity behind clear interfaces, and prefer code that is easy to reason about over code that is merely shorter.</li>
           <li><strong>Agents learn from instant feedback (types and purity).</strong> AI relies on compilers, linters, and tests to catch its own mistakes. Explicit types, clear boundaries, and pure functions without hidden side effects give the agent immediate, unmistakable error messages so it can self-correct before a human even reviews the code.</li>
         </ul>
 
