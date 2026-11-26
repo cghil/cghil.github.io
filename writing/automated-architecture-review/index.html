@@ -69,6 +69,11 @@
 
         <p>The deletion test is blunt: imagine deleting a module, helper, or wrapper. If its complexity reappears across every caller, it was earning its keep as a deep module. If the complexity simply disappears, it was a shallow pass-through adding indirection for nothing.</p>
 
+        <figure class="deletion-test-figure">
+          <deletion-test></deletion-test>
+          <figcaption>The deletion test: a valuable abstraction absorbs complexity; an unnecessary abstraction merely adds indirection.</figcaption>
+        </figure>
+
         <p><strong>YAGNI</strong> — you aren’t gonna need it — is the companion rule. Do not build abstractions before you actually need them. When code is cheap to generate, it is tempting to wrap everything in premature layers “just in case.” Wait until a seam is real before extracting it. Otherwise, you spend your review budget maintaining shallow helpers that fail the deletion test a week later.</p>
 
         <h2>Fundamentals are now guardrails for AI reliability</h2>
@@ -98,5 +103,6 @@
       </span>
     </div>
   </footer>
+  <script type="module" src="/public/javascript/deletion-test.js"></script>
 </body>
 </html>
