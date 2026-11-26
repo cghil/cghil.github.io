@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automating Architecture Reviews with AI Agents · Corey Ghilarducci</title>
+  <meta name="description" content="Eight PRs in a day changes how a codebase ages. Here is how I run a weekly agent to protect software fundamentals as code volume scales.">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/stylesheets/site.css">
+  <link rel="stylesheet" href="/public/stylesheets/writing.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-mark" href="/">Corey Ghilarducci</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/writing/" aria-current="page">Writing</a>
+      <a href="/about/">About</a>
+      <a href="/resume/">Resume</a>
+      <a href="https://github.com/cghil">GitHub</a>
+      <a href="https://www.linkedin.com/in/coreyghilarducci/">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <article class="article">
+      <header class="article-header">
+        <a class="article-back" href="/writing/">← Writing</a>
+        <h1 class="article-title">Automating Architecture Reviews with AI Agents</h1>
+        <p class="article-meta">
+          <time datetime="2026-11-22">November 22, 2026</time>
+        </p>
+      </header>
+
+      <div class="article-body">
+        <p>A few weeks ago, I posted eight pull requests in a single day to deliver stacked slices of a new feature in AI Center at Box. These were real PRs — hundreds to under two thousand lines each (I try to keep units of work under a thousand lines). Two years ago, that would have been close to three weeks of work.</p>
+
+        <p>I am no longer the only engineer shipping at this pace. Going from idea to working code has never been easier, and that trend is only accelerating — listen to engineers like <a href="https://www.youtube.com/watch?v=MN9dGgmLyso">Poteto on podcasts</a> talking about shipping at massive agentic scale and it is clear where the industry is headed.</p>
+
+        <p>The review bottleneck is real. And right behind it is a harder problem: keeping a codebase from losing its foundation when code lands this fast.</p>
+
+        <h2>The Senior Engineer model is changing</h2>
+        <p>We still require engineers to review and approve code. Security alone demands it — someone still has to guard against subtle flaws or a bad actor injecting malicious code.</p>
+
+        <p>Even so, how I review has shifted. I focus on interfaces rather than reading every internal line of a function, trusting AI to handle much of the implementation detail. To catch subtle bugs or malicious code inside those diffs, I rely on automated review agents along with a custom review skill I built for myself.</p>
+
+        <p>As code volume per unit of time keeps climbing, the old model of the Senior Engineer who knows every corner of a repo by heart is going away. No one can hold an entire service in their head when changes merge at this rate. We have to adapt how we maintain architecture.</p>
+
+        <h2>Logic spreads fast across stacked PRs</h2>
+        <p>During that eight-PR stretch, I could already see the drift by PR three or four. Logic was starting to spread across files, and I knew it needed to be tightened up. Every individual diff was reasonable on its own, yet the structure across them was loosening.</p>
+
+        <p>That is what led me to Matt Pocock’s <a href="https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture"><code>improve-codebase-architecture</code></a> skill. Credit where credit is due: Matt’s skill gave me the blueprint. At first, I ran it manually after merging a few PRs. Then I adapted it into a standalone agent that runs once a week on our repo.</p>
+
+        <h2>A weekly standalone architecture agent</h2>
+        <p>At Box, we have an internal standalone agent system that can run agents on a schedule. Because the weekly agent runs independently without a human in the loop, I stripped out the interactive back-and-forth from Matt’s original skill and built a straightforward unattended flow:</p>
+        <ol>
+          <li><strong>Review the last 50 PRs.</strong> Focusing on recent changes keeps the agent looking at code that is actively evolving instead of churning untouched parts of the repo.</li>
+          <li><strong>Generate a visual HTML report.</strong> The agent evaluates candidates and creates graphics explaining why a given structure needs to change.</li>
+          <li><strong>Upload to our team’s Box folder.</strong> Box renders HTML files natively, so anyone on the team can open the report directly in the browser.</li>
+          <li><strong>Post the top candidate to Slack.</strong> A Slack message highlights the single best candidate to fix, explains why it matters, and links straight to the full report.</li>
+        </ol>
+
+        <p>The agent does not silently rewrite the repo. It surfaces the highest-leverage cleanup every week so engineers can decide what to tighten up.</p>
+
+        <h2>The deletion test and YAGNI</h2>
+        <p>Two classic principles at the core of Matt’s skill do most of the work: <strong>the deletion test</strong> and <strong>YAGNI</strong>.</p>
+
+        <p>The deletion test is blunt: imagine deleting a module, helper, or wrapper. If its complexity reappears across every caller, it was earning its keep as a deep module. If the complexity simply disappears, it was a shallow pass-through adding indirection for nothing.</p>
+
+        <p><strong>YAGNI</strong> — you aren’t gonna need it — is the companion rule. Do not build abstractions before you actually need them. When code is cheap to generate, it is tempting to wrap everything in premature layers “just in case.” Wait until a seam is real before extracting it. Otherwise, you spend your review budget maintaining shallow helpers that fail the deletion test a week later.</p>
+
+        <h2>Fundamentals are now guardrails for AI reliability</h2>
+        <p>Software fundamentals still work in an agentic coding world. In many ways, they matter more than ever — they stop being just style preferences for humans and become guardrails for AI reliability:</p>
+        <ul>
+          <li><strong>Agents have limited focus (context windows).</strong> When logic is scattered across a dozen files, an agent has to hunt through the codebase and often misses a spot, causing silent bugs. Keeping related code tightly grouped — high cohesion — lets the agent read a couple of files and get the change right the first time.</li>
+          <li><strong>Typing is cheap, confusion is expensive (rethinking DRY).</strong> AI can generate boilerplate in seconds, but poorly chosen abstractions increase the cognitive load for both engineers and agents. Don’t extract code simply because it looks similar. Centralize business rules, encapsulate meaningful complexity behind clear interfaces, and prefer code that is easy to reason about over code that is merely shorter.</li>
+          <li><strong>Agents learn from instant feedback (types and purity).</strong> AI relies on compilers, linters, and tests to catch its own mistakes. Explicit types, clear boundaries, and pure functions without hidden side effects give the agent immediate, unmistakable error messages so it can self-correct before a human even reviews the code.</li>
+        </ul>
+
+        <p>Ultimately, clean architecture keeps the blast radius small — ensuring an AI agent can safely change one piece of your app without accidentally breaking three others. Running an architecture agent every week is how I keep those fundamentals intact as velocity keeps climbing.</p>
+      </div>
+
+      <footer class="article-footer">
+        <a class="article-back" href="/writing/">← Back to writing</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <span>&copy; Corey Ghilarducci</span>
+      <span>
+        <a href="mailto:cghilarducci@gmail.com">Email</a>
+        ·
+        <a href="/">Home</a>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>
